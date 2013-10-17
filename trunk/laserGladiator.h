@@ -6,7 +6,7 @@
 #include "textureManager.h"
 #include "image.h"
 #include "wall.h"
-#include "Laser.h"
+#include "LaserOld.h"
 #include "Mirror.h"
 #include "enemy.h"
 #include <vector>
@@ -14,6 +14,11 @@ using std::vector;
 #include <ctime>
 #include <fstream>
 using std::ofstream;
+
+namespace gladiatorNS
+{
+	const int COLLISIONS_PER_LASER = 20;
+}
 
 struct Position
 {
@@ -33,8 +38,11 @@ private:
 	int numMirrors;
 	vector<Mirror*> mirrors;
 	vector<Enemy*> enemies;
+	vector<Laser*> lasers;
 	vector<vector<Position>> mirrorPositions;
 	int rows, columns;
+	int playerScore;
+	int numFrames;
 
 public:
 	ofstream debug;

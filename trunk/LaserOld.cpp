@@ -1,4 +1,4 @@
-#include "Laser.h"
+#include "LaserOld.h"
 
 Laser::Laser() : Entity()
 {
@@ -18,6 +18,7 @@ Laser::Laser() : Entity()
 	edge.top = (laserNS::HEIGHT/2)*-1;
 	edge.bottom = (laserNS::HEIGHT/2);
 	spriteData.angle = 0;
+	collisions = 0;
 	mass = laserNS::MASS;
 }
 
@@ -47,4 +48,13 @@ void Laser::update(float frameTime)
         spriteData.y = 0;                           // position at top screen edge
         velocity.y = -velocity.y;                   // reverse Y direction
     }
+}
+
+void Laser::loseEnergy()
+{
+	collisions = 0;
+	spriteData.x = 0;
+	spriteData.y = 0;
+	this->setActive(false);
+	this->setVisible(false);
 }
