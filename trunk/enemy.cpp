@@ -62,19 +62,19 @@ void Enemy::fireLaser()
 			switch(direction)
 			{
 			case UP:
-				yLocation-=30;
+				yLocation-=50;
 				xSpeed = laserNS::SPEED/2;
 				break;
 			case DOWN:
-				yLocation+=30;
+				yLocation+=50;
 				xSpeed = laserNS::SPEED/2;
 				break;
 			case LEFT:
-				xLocation-=30;
+				xLocation-=50;
 				ySpeed = laserNS::SPEED/2;
 				break;
 			case RIGHT:
-				xLocation+=30;
+				xLocation+=50;
 				ySpeed = laserNS::SPEED/2;
 				break;
 			}

@@ -43,6 +43,7 @@ private:
 	int rows, columns;
 	int playerScore;
 	int numFrames;
+	int activeEnemies;
 
 public:
 	ofstream debug;
@@ -61,6 +62,7 @@ public:
     void render();      // "
     void releaseAll();
     void resetAll();
+	void endGamePlayerWins();
 };
 
 #endif
