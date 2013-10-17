@@ -6,8 +6,8 @@
 
 namespace laserNS
 {
-	const int WIDTH = 10;                   // image width
-    const int HEIGHT = 10;               // image height
+	const int WIDTH = 4;                   // image width
+    const int HEIGHT = 4;               // image height
     const int X = GAME_WIDTH/2;   // location on screen
     const int Y = GAME_HEIGHT/2;
     const float SPEED = 200;                // 100 pixels per second
@@ -20,8 +20,11 @@ class Laser : public Entity
 public:
 	Laser();
 	void update(float frameTime);
+	int getCollisions() {return collisions;}
+	void loseEnergy();
+	void increaseCollisions() {collisions++;}
 private:
-
+	int collisions;
 };
 
 #endif

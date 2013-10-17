@@ -2,6 +2,8 @@
 
 LaserGladiator::LaserGladiator()
 {
+	numFrames = 1;
+	playerScore = 0;
 	srand(time(0));
 	numMirrors = 10 + rand() % 20;
 	numWalls = 4;
@@ -13,7 +15,7 @@ LaserGladiator::LaserGladiator()
 	int mirrorSpace = 50;
 	rows = arenaHeight/mirrorSpace-1;
 	columns = arenaWidth/mirrorSpace-2;
-	//need to edit it so it won't put mirrors in the middle
+	//sets up grid system for mirror placement
 	for(int i = 0; i < rows; i++)
 	{
 		mirrorPositions.push_back(vector<Position>());
@@ -133,13 +135,6 @@ void LaserGladiator::initialize(HWND hwnd)
     walls[3]->setY(460);
     walls[3]->setVelocity(VECTOR2(wallNS::SPEED,-wallNS::SPEED)); // VECTOR2(X, Y)
 
-	//laser
-	if (!laser->initialize(this, laserNS::WIDTH, laserNS::HEIGHT, laserNS::TEXTURE_COLS, &laserTexture))
-		throw(GameError(gameErrorNS::FATAL_ERROR, "error initializing laser"));
-	laser->setX(GAME_HEIGHT/2);
-	laser->setY(GAME_WIDTH/2);
-	laser->setVelocity(VECTOR2(laserNS::SPEED,-laserNS::SPEED));
-
 	//mirrors
 	//more or less randomly chooses the mirror positions
 	for(int i = rand()%1; i < mirrorPositions.size(); i+=(2+rand()%1))
@@ -208,8 +203,10 @@ void LaserGladiator::initialize(HWND hwnd)
 			throw(GameError(gameErrorNS::FATAL_ERROR, "error initializing Enemy"));
 	e->setX(35);
 	e->setY(70);
-	e->setVelocity(VECTOR2(enemyNS::SPEED,-enemyNS::SPEED));
+	e->setVelocity(VECTOR2(0,enemyNS::SPEED));
 	e->setDegrees(270);
+	//direction it is pointing
+	e->setDirection(RIGHT);
 	enemies.push_back(e);
 	e=0;
 
@@ -220,7 +217,8 @@ void LaserGladiator::initialize(HWND hwnd)
 	e->setX(GAME_WIDTH-55);
 	e->setY(GAME_HEIGHT-110);
 	e->setDegrees(90);
-	e->setVelocity(VECTOR2(enemyNS::SPEED,-enemyNS::SPEED));
+	e->setVelocity(VECTOR2(0,-enemyNS::SPEED));
+	e->setDirection(LEFT);
 	enemies.push_back(e);
 	e=0;
 
@@ -230,7 +228,8 @@ void LaserGladiator::initialize(HWND hwnd)
 			throw(GameError(gameErrorNS::FATAL_ERROR, "error initializing Enemy"));
 	e->setX(GAME_WIDTH-125);
 	e->setY(20);
-	e->setVelocity(VECTOR2(enemyNS::SPEED,-enemyNS::SPEED));
+	e->setVelocity(VECTOR2(-enemyNS::SPEED,0));
+	e->setDirection(DOWN);
 	enemies.push_back(e);
 	e=0;
 
@@ -241,7 +240,8 @@ void LaserGladiator::initialize(HWND hwnd)
 	e->setX(100);
 	e->setY(GAME_HEIGHT-55);
 	e->setDegrees(180);
-	e->setVelocity(VECTOR2(enemyNS::SPEED,-enemyNS::SPEED));
+	e->setVelocity(VECTOR2(enemyNS::SPEED,0));
+	e->setDirection(UP);
 	enemies.push_back(e);
 	e=0;
 
@@ -277,7 +277,7 @@ void LaserGladiator::initialize(HWND hwnd)
     w->setFrames(wallNS::WALL_START_FRAME, wallNS::WALL_END_FRAME);
     w->setCurrentFrame(wallNS::WALL_START_FRAME);
     w->setX(105);
-    w->setY(55);
+    w->setY(52);
     w->setVelocity(VECTOR2(wallNS::SPEED,-wallNS::SPEED)); // VECTOR2(X, Y)
 	walls.push_back(w);
 	w=0;
@@ -294,6 +294,21 @@ void LaserGladiator::initialize(HWND hwnd)
 	walls.push_back(w);
 	w=0;
 
+	//enemy lasers
+	for(int i = 0; i < enemies.size(); i++)
+	{
+		for(int j = 0; j < enemyNS::TOTAL_LASERS; j++)
+		{
+			if (!enemies[i]->getLasers()[j]->initialize(this, laserNS::WIDTH, laserNS::HEIGHT, laserNS::TEXTURE_COLS, &laserTexture))
+				throw(GameError(gameErrorNS::FATAL_ERROR, "error initializing laser"));
+			enemies[i]->getLasers()[j]->setX(0);
+			enemies[i]->getLasers()[j]->setY(0);
+			enemies[i]->getLasers()[j]->setVisible(false);
+			enemies[i]->getLasers()[j]->setActive(false);
+			//creates more pointers to control
+			lasers.push_back(enemies[i]->getLasers()[j]);
+		}
+	}
 }
 
 void LaserGladiator::update()
@@ -303,16 +318,44 @@ void LaserGladiator::update()
 	{
 		walls[i]->update(frameTime);
 	}
-	laser->update(frameTime);
 	for(int i = 0; i < mirrors.size(); i++)
 	{
 		mirrors[i]->update(frameTime);
 	}
 	for(int i = 0; i < enemies.size(); i++)
 	{
-		enemies[i]->update(frameTime);
+		if(enemies[i]->getActive())
+		{
+			enemies[i]->update(frameTime);
+		}
 	}
-	debug << "x: " << laser->getVelocity().x << " y: " << laser->getVelocity().y << "\n";
+	for(int i = 0; i < lasers.size(); i++)
+	{
+		if(lasers[i]->getActive())
+		{
+			if(lasers[i]->getCollisions() > gladiatorNS::COLLISIONS_PER_LASER)
+				lasers[i]->loseEnergy();
+			lasers[i]->update(frameTime);
+		}
+	}
+	//fire a laser from enemy turret
+	if(numFrames%(500+rand()%1000)==0)
+	{
+		int enemyChosen = rand()%4;
+		if(enemies[enemyChosen]->getActive())
+			enemies[enemyChosen]->fireLaser();
+		else
+		{
+			//if it chooses an inactive turret it fires the first active durret it finds
+			for(int i = 0; i < enemies.size(); i++)
+			{
+				if(enemies[i]->getActive())
+					enemies[i]->fireLaser();
+			}
+		}
+		numFrames=0;
+	}
+	numFrames++;
 }
 
 void LaserGladiator::ai()
@@ -325,19 +368,23 @@ void LaserGladiator::collisions()
 
 	for(int i = 0; i < walls.size(); i++)
 	{
-		if(laser->collidesWith(*walls[i],collisionVector))
+		for(int j = 0; j < lasers.size(); j++)
 		{
-			//it is debatable if this is the best system to respond to the collision
-			if(walls[i]->getWidth() > walls[i]->getHeight())
+			if(lasers[j]->collidesWith(*walls[i],collisionVector))
 			{
-				//laser->bounce(collisionVector, *walls[i]);
-				laser->setVelocity(VECTOR2(laser->getVelocity().x,laser->getVelocity().y*-1));
-				laser->setY((walls[i]->getY()>GAME_HEIGHT/2) ? walls[i]->getY() - 10 : walls[i]->getY() + 10);
-			}
-			else
-			{
-				laser->setVelocity(VECTOR2(laser->getVelocity().x*-1,laser->getVelocity().y));
-				laser->setX((walls[i]->getX()>GAME_HEIGHT) ? walls[i]->getX() - 10 : walls[i]->getX() + 10);
+				//it is debatable if this is the best system to respond to the collision
+				if(walls[i]->getWidth() > walls[i]->getHeight())
+				{
+					//laser->bounce(collisionVector, *walls[i]);
+					lasers[j]->setVelocity(VECTOR2(lasers[j]->getVelocity().x,lasers[j]->getVelocity().y*-1));
+					lasers[j]->setY((walls[i]->getY()>GAME_HEIGHT/2) ? walls[i]->getY() - 10 : walls[i]->getY() + 10);
+				}
+				else
+				{
+					lasers[j]->setVelocity(VECTOR2(lasers[j]->getVelocity().x*-1,lasers[j]->getVelocity().y));
+					lasers[j]->setX((walls[i]->getX()>GAME_HEIGHT) ? walls[i]->getX() - 10 : walls[i]->getX() + 10);
+				}
+				lasers[j]->increaseCollisions();
 			}
 		}
 	}
@@ -345,20 +392,30 @@ void LaserGladiator::collisions()
 	//colisisions with mirrors
 	for(int i = 0; i < mirrors.size(); i++)
 	{
-		if(laser->collidesWith(*mirrors[i], collisionVector))
+		for(int j = 0; j < lasers.size(); j++)
 		{
-			laser->bounce(collisionVector, *mirrors[i]);
-			//laser->setVelocity(VECTOR2(laserNS::SPEED,laserNS::SPEED));
+			if(lasers[j]->collidesWith(*mirrors[i], collisionVector))
+			{
+				lasers[j]->bounce(collisionVector, *mirrors[i]);
+				lasers[j]->increaseCollisions();
+				//laser->setVelocity(VECTOR2(laserNS::SPEED,laserNS::SPEED));
+			}
 		}
 	}
 
 	//collisions with turrets
 	for(int i = 0; i < enemies.size(); i++)
 	{
-		if(laser->collidesWith(*enemies[i], collisionVector))
+		for(int j = 0; j < lasers.size(); j++)
 		{
-			laser->bounce(collisionVector, *enemies[i]);
-			//laser->setVelocity(VECTOR2(laserNS::SPEED,laserNS::SPEED));
+			if(lasers[j]->collidesWith(*enemies[i], collisionVector))
+			{
+				lasers[j]->bounce(collisionVector, *enemies[i]);
+				lasers[j]->increaseCollisions();
+				//laser->setVelocity(VECTOR2(laserNS::SPEED,laserNS::SPEED));
+				enemies[i]->blowUp();
+				playerScore+=100;
+			}
 		}
 	}
 }
@@ -376,9 +433,16 @@ void LaserGladiator::render()
 	}
 	for(int i = 0; i < enemies.size(); i++)
 	{
-		enemies[i]->draw();
+		if(enemies[i]->getActive())
+			enemies[i]->draw();
 	}
-	laser->draw();
+	for(int i = 0; i < lasers.size(); i++)
+	{
+		if(lasers[i]->getActive())
+		{
+			lasers[i]->draw();
+		}
+	}
 	//do all of the entity draws
 	graphics->spriteEnd();
 }
