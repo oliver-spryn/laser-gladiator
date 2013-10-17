@@ -2,6 +2,7 @@
 
 LaserGladiator::LaserGladiator()
 {
+	activeEnemies = 4;
 	numFrames = 1;
 	playerScore = 0;
 	srand(time(0));
@@ -356,6 +357,11 @@ void LaserGladiator::update()
 		numFrames=0;
 	}
 	numFrames++;
+	//end game
+	if(activeEnemies == 0)
+	{
+		endGamePlayerWins();
+	}
 }
 
 void LaserGladiator::ai()
@@ -364,25 +370,25 @@ void LaserGladiator::ai()
 void LaserGladiator::collisions()
 {
 	VECTOR2 collisionVector;
-	//check collision between all entities with every other entity
+	//check collision between all entities with lasers
 
+	//wall collisions
+	//may need to add in some mechanism to make sure lasers do not get stuck in walls, that is the commented out code
 	for(int i = 0; i < walls.size(); i++)
 	{
 		for(int j = 0; j < lasers.size(); j++)
 		{
 			if(lasers[j]->collidesWith(*walls[i],collisionVector))
 			{
-				//it is debatable if this is the best system to respond to the collision
 				if(walls[i]->getWidth() > walls[i]->getHeight())
 				{
-					//laser->bounce(collisionVector, *walls[i]);
 					lasers[j]->setVelocity(VECTOR2(lasers[j]->getVelocity().x,lasers[j]->getVelocity().y*-1));
-					lasers[j]->setY((walls[i]->getY()>GAME_HEIGHT/2) ? walls[i]->getY() - 10 : walls[i]->getY() + 10);
+					//lasers[j]->setY((walls[i]->getY()>GAME_HEIGHT/2) ? walls[i]->getY() - 10 : walls[i]->getY() + 10);
 				}
 				else
 				{
 					lasers[j]->setVelocity(VECTOR2(lasers[j]->getVelocity().x*-1,lasers[j]->getVelocity().y));
-					lasers[j]->setX((walls[i]->getX()>GAME_HEIGHT) ? walls[i]->getX() - 10 : walls[i]->getX() + 10);
+					//lasers[j]->setX((walls[i]->getX()>GAME_HEIGHT) ? walls[i]->getX() - 10 : walls[i]->getX() + 10);
 				}
 				lasers[j]->increaseCollisions();
 			}
@@ -415,6 +421,7 @@ void LaserGladiator::collisions()
 				//laser->setVelocity(VECTOR2(laserNS::SPEED,laserNS::SPEED));
 				enemies[i]->blowUp();
 				playerScore+=100;
+				activeEnemies--;
 			}
 		}
 	}
@@ -471,4 +478,10 @@ void LaserGladiator::resetAll()
 	enemyTexture.onResetDevice();
 	Game::resetAll();
 	return;
+}
+
+void LaserGladiator::endGamePlayerWins()
+{
+	//do something cool here
+	exitGame();
 }
