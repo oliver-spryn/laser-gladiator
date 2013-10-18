@@ -58,4 +58,33 @@ const UCHAR ESC_KEY      = VK_ESCAPE;       // escape key
 const UCHAR ALT_KEY      = VK_MENU;         // Alt key
 const UCHAR ENTER_KEY    = VK_RETURN;       // Enter key
 
+namespace enemyNS
+{
+	const int WIDTH = 25;            
+    const int HEIGHT = 31;           
+    const int X = GAME_WIDTH/4;   
+    const int Y = GAME_HEIGHT/4;
+    const float SPEED = 80;    
+    const float MASS = 0.0f;    
+    const int   TEXTURE_COLS = 1;
+	const int	TOTAL_LASERS=3;
+}
+
+namespace gladiatorNS
+{
+	const int COLLISIONS_PER_LASER = 20;
+	const int ARENA_HEIGHT = 400;
+	const int ARENA_WIDTH = 600;
+	const int WALL_WIDTH = 4;
+	const int ARENA_START_X = 20;
+	const int ARENA_START_Y = 60;
+	const int ENEMY_WALL_GAP_SIZE = 20;
+	//for horizontal enemy walls
+	const int DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H = enemyNS::HEIGHT + enemyNS::HEIGHT/2;
+	//for verticle enemy walls
+	const int DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V = 2*enemyNS::WIDTH;
+	const float MIRROR_SIZE = 0.75;
+}
+
+
 #endif

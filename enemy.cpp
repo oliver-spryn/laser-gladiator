@@ -1,7 +1,8 @@
 #include "enemy.h"
 
-Enemy::Enemy()
+Enemy::Enemy(Direction direction)
 {
+	this->direction = direction;
 	spriteData.width = enemyNS::WIDTH;           // size of enemy
     spriteData.height = enemyNS::HEIGHT;
     spriteData.x = enemyNS::X;                   // location on screen
@@ -24,6 +25,8 @@ Enemy::Enemy()
 	{
 		lasers[i] = new Laser();
 	}
+	distanceToTravel = (direction == LEFT||direction == RIGHT)?gladiatorNS::ARENA_HEIGHT-gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H*2 - enemyNS::WIDTH*2:
+		gladiatorNS::ARENA_WIDTH-gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V*2 - gladiatorNS::ENEMY_WALL_GAP_SIZE * 2 - enemyNS::HEIGHT*2;
 }
 
 void Enemy::update(float frameTime)
@@ -35,7 +38,7 @@ void Enemy::update(float frameTime)
     spriteData.y += frameTime * velocity.y;         // move ship along Y
 	distanceMoved += abs((spriteData.x - oldX));
 	distanceMoved += abs((spriteData.y - oldY));
-	if(distanceMoved > 300)
+	if(distanceMoved > distanceToTravel)
 	{
 		velocity.x*=-1;
 		velocity.y*=-1;

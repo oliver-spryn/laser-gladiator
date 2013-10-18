@@ -8,14 +8,13 @@ LaserGladiator::LaserGladiator()
 	srand(time(0));
 	numMirrors = 10 + rand() % 20;
 	numWalls = 4;
-	laser = new Laser;
 	debug.open("debug.txt");
 	debug << "starting\n";
-	int arenaWidth = GAME_WIDTH-50;
-	int arenaHeight = GAME_HEIGHT-50;
-	int mirrorSpace = 50;
-	rows = arenaHeight/mirrorSpace-1;
-	columns = arenaWidth/mirrorSpace-2;
+	int arenaWidth = gladiatorNS::ARENA_WIDTH;
+	int arenaHeight = gladiatorNS::ARENA_HEIGHT;
+	int mirrorSpace = mirrorNS::HEIGHT + mirrorNS::HEIGHT/3;
+	rows = arenaHeight/mirrorSpace-2;
+	columns = arenaWidth/mirrorSpace-3;
 	//sets up grid system for mirror placement
 	for(int i = 0; i < rows; i++)
 	{
@@ -41,7 +40,8 @@ LaserGladiator::LaserGladiator()
 				j++;
 			}
 			else
-				mirrorPositions[i].push_back(Position((100+(mirrorSpace*j)),(65+(mirrorSpace*i))));
+				mirrorPositions[i].push_back(Position((gladiatorNS::ARENA_START_X+gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V+(mirrorSpace*j)
+				+mirrorNS::WIDTH/2),(gladiatorNS::ARENA_START_Y+gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H+(mirrorSpace*i)+mirrorNS::HEIGHT/2)));
 		}
 	}
 }
@@ -87,54 +87,50 @@ void LaserGladiator::initialize(HWND hwnd)
 
 	//initialize all entities
 	//wall left
-	Wall* left = new Wall(400,4);
+	Wall* left = new Wall(gladiatorNS::ARENA_HEIGHT,gladiatorNS::WALL_WIDTH);
 	walls.push_back(left);
 	left = 0;
-	if (!walls[0]->initialize(this, 4, 450, wallNS::TEXTURE_COLS, &wallTexture))
+	if (!walls[0]->initialize(this, gladiatorNS::WALL_WIDTH, gladiatorNS::ARENA_HEIGHT, wallNS::TEXTURE_COLS, &wallTexture))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing wall1"));
     walls[0]->setFrames(wallNS::WALL_START_FRAME, wallNS::WALL_END_FRAME);
     walls[0]->setCurrentFrame(wallNS::WALL_START_FRAME);
-    walls[0]->setX(20);
-    walls[0]->setY(10);
-    walls[0]->setVelocity(VECTOR2(wallNS::SPEED,-wallNS::SPEED)); // VECTOR2(X, Y)
+    walls[0]->setX(gladiatorNS::ARENA_START_X);
+    walls[0]->setY(gladiatorNS::ARENA_START_Y);
 
 	//wall right
-	Wall* right = new Wall(400,4);
+	Wall* right = new Wall(gladiatorNS::ARENA_HEIGHT,gladiatorNS::WALL_WIDTH);
 	walls.push_back(right);
 	right = 0;
-	if (!walls[1]->initialize(this, 4, 450, wallNS::TEXTURE_COLS, &wallTexture))
+	if (!walls[1]->initialize(this, gladiatorNS::WALL_WIDTH, gladiatorNS::ARENA_HEIGHT, wallNS::TEXTURE_COLS, &wallTexture))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing wall1"));
     walls[1]->setFrames(wallNS::WALL_START_FRAME, wallNS::WALL_END_FRAME);
     walls[1]->setCurrentFrame(wallNS::WALL_START_FRAME);
-    walls[1]->setX(GAME_WIDTH-20);
-    walls[1]->setY(10);
-    walls[1]->setVelocity(VECTOR2(wallNS::SPEED,-wallNS::SPEED)); // VECTOR2(X, Y)
+    walls[1]->setX(gladiatorNS::ARENA_WIDTH + gladiatorNS::ARENA_START_X);
+    walls[1]->setY(gladiatorNS::ARENA_START_Y);
 
 	//wall top
-	Wall* top = new Wall(4,620);
+	Wall* top = new Wall(gladiatorNS::WALL_WIDTH,gladiatorNS::ARENA_WIDTH);
 	walls.push_back(top);
 	top = 0;
 	//reverse height and width for rotated wall
-	if (!walls[2]->initialize(this, 600, 4, 1, &hWallTexture))
+	if (!walls[2]->initialize(this, gladiatorNS::ARENA_WIDTH, gladiatorNS::WALL_WIDTH, 1, &hWallTexture))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing wall1"));
     walls[2]->setFrames(wallNS::WALL_START_FRAME, wallNS::WALL_END_FRAME);
     walls[2]->setCurrentFrame(wallNS::WALL_START_FRAME);
-    walls[2]->setX(20);
-    walls[2]->setY(10);
-    walls[2]->setVelocity(VECTOR2(wallNS::SPEED,-wallNS::SPEED)); // VECTOR2(X, Y)
+    walls[2]->setX(gladiatorNS::ARENA_START_X);
+    walls[2]->setY(gladiatorNS::ARENA_START_Y);
 
 	//wall bottom
-	Wall* bottom = new Wall(4,620);
+	Wall* bottom = new Wall(gladiatorNS::WALL_WIDTH,gladiatorNS::ARENA_WIDTH);
 	walls.push_back(bottom);
 	bottom = 0;
 	//reverse height and width for rotated wall
-	if (!walls[3]->initialize(this, 600, 4, 1, &hWallTexture))
+	if (!walls[3]->initialize(this, gladiatorNS::ARENA_WIDTH, gladiatorNS::WALL_WIDTH, 1, &hWallTexture))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing wall1"));
     walls[3]->setFrames(wallNS::WALL_START_FRAME, wallNS::WALL_END_FRAME);
     walls[3]->setCurrentFrame(wallNS::WALL_START_FRAME);
-    walls[3]->setX(20);
-    walls[3]->setY(460);
-    walls[3]->setVelocity(VECTOR2(wallNS::SPEED,-wallNS::SPEED)); // VECTOR2(X, Y)
+    walls[3]->setX(gladiatorNS::ARENA_START_X);
+    walls[3]->setY(gladiatorNS::ARENA_START_Y + gladiatorNS::ARENA_HEIGHT);
 
 	//mirrors
 	//more or less randomly chooses the mirror positions
@@ -154,69 +150,72 @@ void LaserGladiator::initialize(HWND hwnd)
 			m->setX(xLocation);
 			m->setY(yLocation);
 			m->setVelocity(VECTOR2(mirrorNS::SPEED,-mirrorNS::SPEED));
-			m->setScale(0.75);
+			m->setScale(gladiatorNS::MIRROR_SIZE);
 			mirrors.push_back(m);
 			m = 0;
 		}
 	}
 
 	//mirrors for corners
+	//top left
 	Mirror* m = new Mirror(mirrorNS::CORNER_COLOR);
 	if(!m->initialize(this, mirrorNS::WIDTH, mirrorNS::HEIGHT, mirrorNS::TEXTURE_COLS, &mirrorTexture))
 			throw(GameError(gameErrorNS::FATAL_ERROR, "error initializing Mirror"));
-	m->setX(15);
-	m->setY(5);
+	m->setX(gladiatorNS::ARENA_START_X - (mirrorNS::WIDTH * mirrorNS::CORNER_RATIO)/4);
+	m->setY(gladiatorNS::ARENA_START_Y - (mirrorNS::HEIGHT * mirrorNS::CORNER_RATIO)/4);
 	m->setVelocity(VECTOR2(mirrorNS::SPEED,-mirrorNS::SPEED));
 	m->setScale(mirrorNS::CORNER_RATIO);
 	mirrors.push_back(m);
 	
+	//top right
 	m = new Mirror(mirrorNS::CORNER_COLOR);
 	if(!m->initialize(this, mirrorNS::WIDTH, mirrorNS::HEIGHT, mirrorNS::TEXTURE_COLS, &mirrorTexture))
 			throw(GameError(gameErrorNS::FATAL_ERROR, "error initializing Mirror"));
-	m->setX(GAME_WIDTH-35);
-	m->setY(5);
+	m->setX(gladiatorNS::ARENA_START_X + gladiatorNS::ARENA_WIDTH - (mirrorNS::WIDTH * mirrorNS::CORNER_RATIO)/2);
+	m->setY(gladiatorNS::ARENA_START_Y - (mirrorNS::HEIGHT * mirrorNS::CORNER_RATIO)/4);
 	m->setVelocity(VECTOR2(mirrorNS::SPEED,-mirrorNS::SPEED));
 	m->setScale(mirrorNS::CORNER_RATIO);
 	mirrors.push_back(m);
 
+	//bottom left
 	m = new Mirror(mirrorNS::CORNER_COLOR);
 	if(!m->initialize(this, mirrorNS::WIDTH, mirrorNS::HEIGHT, mirrorNS::TEXTURE_COLS, &mirrorTexture))
 			throw(GameError(gameErrorNS::FATAL_ERROR, "error initializing Mirror"));
-	m->setX(15);
-	m->setY(445);
+	m->setX(gladiatorNS::ARENA_START_X - (mirrorNS::WIDTH * mirrorNS::CORNER_RATIO)/4);
+	m->setY(gladiatorNS::ARENA_START_Y + gladiatorNS::ARENA_HEIGHT - (mirrorNS::HEIGHT * mirrorNS::CORNER_RATIO)/2);
 	m->setVelocity(VECTOR2(mirrorNS::SPEED,-mirrorNS::SPEED));
 	m->setScale(mirrorNS::CORNER_RATIO);
 	mirrors.push_back(m);
 
+	//bottom right
 	m = new Mirror(mirrorNS::CORNER_COLOR);
 	if(!m->initialize(this, mirrorNS::WIDTH, mirrorNS::HEIGHT, mirrorNS::TEXTURE_COLS, &mirrorTexture))
 			throw(GameError(gameErrorNS::FATAL_ERROR, "error initializing Mirror"));
-	m->setX(GAME_WIDTH-35);
-	m->setY(445);
+	m->setX(gladiatorNS::ARENA_START_X + gladiatorNS::ARENA_WIDTH - (mirrorNS::WIDTH * mirrorNS::CORNER_RATIO)/2);
+	m->setY(gladiatorNS::ARENA_START_Y + gladiatorNS::ARENA_HEIGHT - (mirrorNS::HEIGHT * mirrorNS::CORNER_RATIO)/2);
 	m->setVelocity(VECTOR2(mirrorNS::SPEED,-mirrorNS::SPEED));
 	m->setScale(mirrorNS::CORNER_RATIO);
 	mirrors.push_back(m);
 	m=0;
 
 	//left enemy
-	Enemy* e = new Enemy;
+	//construction takes the direction the turret should be pointing
+	Enemy* e = new Enemy(RIGHT);
 	if(!e->initialize(this, enemyNS::WIDTH, enemyNS::HEIGHT, enemyNS::TEXTURE_COLS, &enemyTexture))
 			throw(GameError(gameErrorNS::FATAL_ERROR, "error initializing Enemy"));
-	e->setX(35);
-	e->setY(70);
+	e->setX(gladiatorNS::ARENA_START_X + enemyNS::HEIGHT/2);
+	e->setY(gladiatorNS::ARENA_START_Y + gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H + enemyNS::WIDTH/2);
 	e->setVelocity(VECTOR2(0,enemyNS::SPEED));
 	e->setDegrees(270);
-	//direction it is pointing
-	e->setDirection(RIGHT);
 	enemies.push_back(e);
 	e=0;
 
 	//right enemy
-	e = new Enemy;
+	e = new Enemy(LEFT);
 	if(!e->initialize(this, enemyNS::WIDTH, enemyNS::HEIGHT, enemyNS::TEXTURE_COLS, &enemyTexture))
 			throw(GameError(gameErrorNS::FATAL_ERROR, "error initializing Enemy"));
-	e->setX(GAME_WIDTH-55);
-	e->setY(GAME_HEIGHT-110);
+	e->setX(gladiatorNS::ARENA_START_X+gladiatorNS::ARENA_WIDTH - enemyNS::HEIGHT);
+	e->setY(gladiatorNS::ARENA_START_Y + gladiatorNS::ARENA_HEIGHT - gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H - enemyNS::WIDTH*2);
 	e->setDegrees(90);
 	e->setVelocity(VECTOR2(0,-enemyNS::SPEED));
 	e->setDirection(LEFT);
@@ -224,22 +223,22 @@ void LaserGladiator::initialize(HWND hwnd)
 	e=0;
 
 	//top enemy
-	e = new Enemy;
+	e = new Enemy(DOWN);
 	if(!e->initialize(this, enemyNS::WIDTH, enemyNS::HEIGHT, enemyNS::TEXTURE_COLS, &enemyTexture))
 			throw(GameError(gameErrorNS::FATAL_ERROR, "error initializing Enemy"));
-	e->setX(GAME_WIDTH-125);
-	e->setY(20);
+	e->setX(gladiatorNS::ARENA_START_X + gladiatorNS::ARENA_WIDTH - gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V - enemyNS::WIDTH*2);
+	e->setY(gladiatorNS::ARENA_START_Y + enemyNS::HEIGHT/3);
 	e->setVelocity(VECTOR2(-enemyNS::SPEED,0));
 	e->setDirection(DOWN);
 	enemies.push_back(e);
 	e=0;
 
 	//bottom enemy
-	e = new Enemy;
+	e = new Enemy(UP);
 	if(!e->initialize(this, enemyNS::WIDTH, enemyNS::HEIGHT, enemyNS::TEXTURE_COLS, &enemyTexture))
 			throw(GameError(gameErrorNS::FATAL_ERROR, "error initializing Enemy"));
-	e->setX(100);
-	e->setY(GAME_HEIGHT-55);
+	e->setX(gladiatorNS::ARENA_START_X + gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V + enemyNS::WIDTH*2);
+	e->setY(gladiatorNS::ARENA_START_Y + gladiatorNS::ARENA_HEIGHT - enemyNS::HEIGHT);
 	e->setDegrees(180);
 	e->setVelocity(VECTOR2(enemyNS::SPEED,0));
 	e->setDirection(UP);
@@ -248,49 +247,51 @@ void LaserGladiator::initialize(HWND hwnd)
 
 	//enemy walls
 	//left
-	Wall* w = new Wall(GAME_HEIGHT-130,4);
-	if (!w->initialize(this, 4, GAME_HEIGHT-130, wallNS::TEXTURE_COLS, &enemyWallTexture))
+	Wall* w = new Wall(gladiatorNS::ARENA_HEIGHT-gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H*2,gladiatorNS::WALL_WIDTH);
+	if (!w->initialize(this, gladiatorNS::WALL_WIDTH, gladiatorNS::ARENA_HEIGHT-gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H*2,
+		wallNS::TEXTURE_COLS, &enemyWallTexture))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing wall1"));
     w->setFrames(wallNS::WALL_START_FRAME, wallNS::WALL_END_FRAME);
     w->setCurrentFrame(wallNS::WALL_START_FRAME);
-    w->setX(70);
-    w->setY(60);
-    w->setVelocity(VECTOR2(wallNS::SPEED,-wallNS::SPEED)); // VECTOR2(X, Y)
+    w->setX(gladiatorNS::ARENA_START_X + gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V);
+    w->setY(gladiatorNS::ARENA_START_Y + gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H);
 	walls.push_back(w);
 	w=0;
 
 	//right
-	w = new Wall(GAME_HEIGHT-130,4);
-	if (!w->initialize(this, 4, GAME_HEIGHT-130, wallNS::TEXTURE_COLS, &enemyWallTexture))
+	w = new Wall(gladiatorNS::ARENA_HEIGHT-gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H*2,gladiatorNS::WALL_WIDTH);
+	if (!w->initialize(this, gladiatorNS::WALL_WIDTH, gladiatorNS::ARENA_HEIGHT-gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H*2,
+		wallNS::TEXTURE_COLS, &enemyWallTexture))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing wall1"));
     w->setFrames(wallNS::WALL_START_FRAME, wallNS::WALL_END_FRAME);
     w->setCurrentFrame(wallNS::WALL_START_FRAME);
-    w->setX(GAME_WIDTH-70);
-    w->setY(60);
-    w->setVelocity(VECTOR2(wallNS::SPEED,-wallNS::SPEED)); // VECTOR2(X, Y)
+    w->setX(gladiatorNS::ARENA_START_X + gladiatorNS::ARENA_WIDTH - gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V);
+    w->setY(gladiatorNS::ARENA_START_Y + gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H);
 	walls.push_back(w);
 	w=0;
 
 	//top
-	w = new Wall(4,GAME_WIDTH-200);
-	if (!w->initialize(this, GAME_WIDTH-200, 4, 1, &hEnemyWallTexture))
+	w = new Wall(gladiatorNS::WALL_WIDTH,gladiatorNS::ARENA_WIDTH-gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V*2 - gladiatorNS::ENEMY_WALL_GAP_SIZE * 2);
+	if (!w->initialize(this, gladiatorNS::ARENA_WIDTH-gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V*2 - gladiatorNS::ENEMY_WALL_GAP_SIZE * 2,
+		gladiatorNS::WALL_WIDTH, 1, &hEnemyWallTexture))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing wall1"));
     w->setFrames(wallNS::WALL_START_FRAME, wallNS::WALL_END_FRAME);
     w->setCurrentFrame(wallNS::WALL_START_FRAME);
-    w->setX(105);
-    w->setY(52);
+    w->setX(gladiatorNS::ARENA_START_X + gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V + gladiatorNS::ENEMY_WALL_GAP_SIZE);
+    w->setY(gladiatorNS::ARENA_START_Y + gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H);
     w->setVelocity(VECTOR2(wallNS::SPEED,-wallNS::SPEED)); // VECTOR2(X, Y)
 	walls.push_back(w);
 	w=0;
 
 	//bottom
-	w = new Wall(4,GAME_WIDTH-200);
-	if (!w->initialize(this, GAME_WIDTH-200, 4, 1, &hEnemyWallTexture))
+	w = new Wall(gladiatorNS::WALL_WIDTH,gladiatorNS::ARENA_WIDTH-gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V*2 - gladiatorNS::ENEMY_WALL_GAP_SIZE * 2);
+	if (!w->initialize(this, gladiatorNS::ARENA_WIDTH-gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V*2 - gladiatorNS::ENEMY_WALL_GAP_SIZE * 2,
+		gladiatorNS::WALL_WIDTH, 1, &hEnemyWallTexture))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing wall1"));
     w->setFrames(wallNS::WALL_START_FRAME, wallNS::WALL_END_FRAME);
     w->setCurrentFrame(wallNS::WALL_START_FRAME);
-    w->setX(105);
-    w->setY(GAME_HEIGHT-65);
+    w->setX(gladiatorNS::ARENA_START_X + gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V + gladiatorNS::ENEMY_WALL_GAP_SIZE);
+    w->setY(gladiatorNS::ARENA_START_Y + gladiatorNS::ARENA_HEIGHT - gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H);
     w->setVelocity(VECTOR2(wallNS::SPEED,-wallNS::SPEED)); // VECTOR2(X, Y)
 	walls.push_back(w);
 	w=0;
