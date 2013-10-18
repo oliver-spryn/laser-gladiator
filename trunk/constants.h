@@ -28,9 +28,9 @@
 //                  Constants
 //-----------------------------------------------
 // graphic images
+const char LASER_IMAGE[] = "source\\pictures\\laser.jpg";
 const char WALL_IMAGE[] = "pictures\\wall.png";	//wall
 const char WALL_IMAGE_HORIZONTAL[] = "pictures\\hwall.png";//horizontal wall
-const char LASER_IMAGE[] = "pictures\\laser.jpg";
 const char MIRROR_IMAGE[] = "pictures\\mirror.jpg";
 const char ENEMY_WALL_IMAGE[] = "pictures\\enemyWall.png";
 const char ENEMY_IMAGE[] = "pictures\\enemy.jpg";

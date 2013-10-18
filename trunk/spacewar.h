@@ -23,9 +23,9 @@ private:
     TextureManager nebulaTexture;   // nebula texture
     TextureManager planetTexture;   // planet texture
     TextureManager shipTexture;     // ship texture
-    Ship    ship;           // spaceship
-    Planet  planet;         // the planet
-    Image   nebula;         // backdrop image
+  //  Ship    ship;           // spaceship
+  //  Planet  planet;         // the planet
+  //  Image   nebula;         // backdrop image
 
 public:
     // Constructor
