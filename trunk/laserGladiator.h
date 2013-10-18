@@ -15,11 +15,6 @@ using std::vector;
 #include <fstream>
 using std::ofstream;
 
-namespace gladiatorNS
-{
-	const int COLLISIONS_PER_LASER = 20;
-}
-
 struct Position
 {
 	Position(float X, float Y) {x=X;y=Y;}
@@ -34,7 +29,6 @@ private:
 	TextureManager wallTexture, laserTexture, hWallTexture, mirrorTexture, enemyWallTexture, hEnemyWallTexture, enemyTexture;
 	int numWalls;
 	vector<Wall*> walls;
-	Laser* laser;
 	int numMirrors;
 	vector<Mirror*> mirrors;
 	vector<Enemy*> enemies;
