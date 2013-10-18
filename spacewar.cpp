@@ -30,7 +30,7 @@ void Spacewar::initialize(HWND hwnd)
     Game::initialize(hwnd); // throws GameError
 
     // nebula texture
-    if (!nebulaTexture.initialize(graphics,NEBULA_IMAGE))
+   /* if (!nebulaTexture.initialize(graphics,NEBULA_IMAGE))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing nebula texture"));
 
     // planet texture
@@ -59,7 +59,7 @@ void Spacewar::initialize(HWND hwnd)
     ship.setCurrentFrame(shipNS::SHIP_START_FRAME);
     ship.setX(GAME_WIDTH/4 - shipNS::WIDTH);
     ship.setY(GAME_HEIGHT/2 - shipNS::HEIGHT);
-    ship.setVelocity(VECTOR2(shipNS::SPEED,-shipNS::SPEED)); // VECTOR2(X, Y)
+    ship.setVelocity(VECTOR2(shipNS::SPEED,-shipNS::SPEED)); // VECTOR2(X, Y)*/
 
     return;
 }
@@ -69,8 +69,8 @@ void Spacewar::initialize(HWND hwnd)
 //=============================================================================
 void Spacewar::update()
 {
-    planet.update(frameTime);
-    ship.update(frameTime);
+  //  planet.update(frameTime);
+  //  ship.update(frameTime);
 }
 
 //=============================================================================
@@ -92,9 +92,9 @@ void Spacewar::render()
 {
     graphics->spriteBegin();                // begin drawing sprites
 
-    nebula.draw();                          // add the orion nebula to the scene
-    planet.draw();                          // add the planet to the scene
-    ship.draw();                            // add the spaceship to the scene
+  //  nebula.draw();                          // add the orion nebula to the scene
+  //  planet.draw();                          // add the planet to the scene
+  //  ship.draw();                            // add the spaceship to the scene
 
     graphics->spriteEnd();                  // end drawing sprites
 }
@@ -105,9 +105,9 @@ void Spacewar::render()
 //=============================================================================
 void Spacewar::releaseAll()
 {
-    shipTexture.onLostDevice();
-    planetTexture.onLostDevice();
-    nebulaTexture.onLostDevice();
+  //  shipTexture.onLostDevice();
+  //  planetTexture.onLostDevice();
+  //  nebulaTexture.onLostDevice();
 
     Game::releaseAll();
     return;
@@ -119,9 +119,9 @@ void Spacewar::releaseAll()
 //=============================================================================
 void Spacewar::resetAll()
 {
-    nebulaTexture.onResetDevice();
-    planetTexture.onResetDevice();
-    shipTexture.onResetDevice();
+  //  nebulaTexture.onResetDevice();
+  //  planetTexture.onResetDevice();
+  //  shipTexture.onResetDevice();
 
     Game::resetAll();
     return;
