@@ -50,6 +50,27 @@ LaserGladiator::LaserGladiator()
 LaserGladiator::~LaserGladiator()
 {
 	debug.close();
+	for(int i = 0; i < walls.size(); i++)
+	{
+		SAFE_DELETE(walls[i]);
+	}
+	for(int i = 0; i < mirrors.size(); i++)
+	{
+		SAFE_DELETE(mirrors[i]);
+	}
+	for(int i = 0; i < enemies.size(); i++)
+	{
+		SAFE_DELETE(enemies[i]);
+	}
+	for(int i = 0; i < lasers.size(); i++)
+	{
+		SAFE_DELETE(lasers[i]);
+	}
+	SAFE_DELETE(healthTextImage);
+	for(int i = 0; i < gladiatorNS::NUM_HEALTH_BARS; i++)
+	{
+		SAFE_DELETE(healthBarImages[i]);
+	}
 	releaseAll();
 }
 
