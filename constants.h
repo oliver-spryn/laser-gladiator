@@ -35,6 +35,7 @@ const char MIRROR_IMAGE[] = "pictures\\mirror.jpg";
 const char ENEMY_WALL_IMAGE[] = "pictures\\enemyWall.png";
 const char ENEMY_IMAGE[] = "pictures\\enemy.jpg";
 const char ENEMY_WALL_IMAGE_HORIZONTAL[] = "pictures\\hEnemyWall.png";
+const char HEALTH_IMAGE[] = "pictures\\HealthText.png";
 
 // window
 const char CLASS_NAME[] = "LaserGladiator";
@@ -84,6 +85,7 @@ namespace gladiatorNS
 	//for verticle enemy walls
 	const int DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V = 2*enemyNS::WIDTH;
 	const float MIRROR_SIZE = 0.75;
+	const int NUM_HEALTH_BARS = 10;
 }
 
 

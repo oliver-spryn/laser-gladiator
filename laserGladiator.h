@@ -9,11 +9,14 @@
 #include "LaserOld.h"
 #include "Mirror.h"
 #include "enemy.h"
+#include "textDX.h"
 #include <vector>
 using std::vector;
 #include <ctime>
 #include <fstream>
 using std::ofstream;
+#include <sstream>
+using std::stringstream;
 
 struct Position
 {
@@ -26,7 +29,7 @@ class LaserGladiator : public Game
 {
 private:
 	//game items
-	TextureManager wallTexture, laserTexture, hWallTexture, mirrorTexture, enemyWallTexture, hEnemyWallTexture, enemyTexture;
+	TextureManager wallTexture, laserTexture, hWallTexture, mirrorTexture, enemyWallTexture, hEnemyWallTexture, enemyTexture, healthTexture;
 	int numWalls;
 	vector<Wall*> walls;
 	int numMirrors;
@@ -34,10 +37,13 @@ private:
 	vector<Enemy*> enemies;
 	vector<Laser*> lasers;
 	vector<vector<Position>> mirrorPositions;
+	Image* healthTextImage;
+	Image* healthBarImages[gladiatorNS::NUM_HEALTH_BARS];
 	int rows, columns;
 	int playerScore;
 	int numFrames;
 	int activeEnemies;
+	TextDX* scoreText;
 
 public:
 	ofstream debug;

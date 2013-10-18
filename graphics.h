@@ -22,6 +22,9 @@
 #define LP_3D       LPDIRECT3D9
 #define VECTOR2     D3DXVECTOR2
 
+//stuff for audio
+#define LP_DXFONT	LPD3DXFONT
+
 // Color defines
 #define COLOR_ARGB DWORD
 #define SETCOLOR_ARGB(a,r,g,b) \
