@@ -2,6 +2,7 @@
 
 LaserGladiator::LaserGladiator()
 {
+	healthTextImage = new Image();
 	activeEnemies = 4;
 	numFrames = 1;
 	playerScore = 0;
@@ -55,6 +56,11 @@ LaserGladiator::~LaserGladiator()
 void LaserGladiator::initialize(HWND hwnd)
 {
 	Game::initialize(hwnd);
+	//initialize texts
+	scoreText = new TextDX();
+	if(scoreText->initialize(graphics, 24, false, false, "Dotum") == false)
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing DirectX font"));
+
 	//initialize all textures
 	//wall texture
 	if(!wallTexture.initialize(graphics,WALL_IMAGE))
@@ -84,6 +90,31 @@ void LaserGladiator::initialize(HWND hwnd)
 	//enemy texture
 	if(!enemyTexture.initialize(graphics,ENEMY_IMAGE))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing enemy texture"));
+
+	//health texture
+	if(!healthTexture.initialize(graphics,HEALTH_IMAGE))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing health texture"));
+	
+	//initialize health images
+	//health text
+    if (!healthTextImage->initialize(graphics,0,0,0,&healthTexture))
+        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing health image"));
+	healthTextImage->setScale(0.75);
+	healthTextImage->setX(0);
+	healthTextImage->setY(25);
+
+	//health bars
+	for(int i = 0; i < gladiatorNS::NUM_HEALTH_BARS; i++)
+	{
+		Image* h = new Image();
+		if(!h->initialize(graphics,0,0,0,&laserTexture))
+			throw(GameError(gameErrorNS::FATAL_ERROR, "error initializing health bar"));
+		h->setX(90+15*i);
+		h->setY(30);
+		h->setScale(10);
+		healthBarImages[i] = h;
+		h=0;
+	}
 
 	//initialize all entities
 	//wall left
@@ -226,7 +257,8 @@ void LaserGladiator::initialize(HWND hwnd)
 	e = new Enemy(DOWN);
 	if(!e->initialize(this, enemyNS::WIDTH, enemyNS::HEIGHT, enemyNS::TEXTURE_COLS, &enemyTexture))
 			throw(GameError(gameErrorNS::FATAL_ERROR, "error initializing Enemy"));
-	e->setX(gladiatorNS::ARENA_START_X + gladiatorNS::ARENA_WIDTH - gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V - enemyNS::WIDTH*2);
+	e->setX(gladiatorNS::ARENA_START_X + gladiatorNS::ARENA_WIDTH - gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V -
+		enemyNS::WIDTH*2 - gladiatorNS::ENEMY_WALL_GAP_SIZE);
 	e->setY(gladiatorNS::ARENA_START_Y + enemyNS::HEIGHT/3);
 	e->setVelocity(VECTOR2(-enemyNS::SPEED,0));
 	e->setDirection(DOWN);
@@ -237,7 +269,7 @@ void LaserGladiator::initialize(HWND hwnd)
 	e = new Enemy(UP);
 	if(!e->initialize(this, enemyNS::WIDTH, enemyNS::HEIGHT, enemyNS::TEXTURE_COLS, &enemyTexture))
 			throw(GameError(gameErrorNS::FATAL_ERROR, "error initializing Enemy"));
-	e->setX(gladiatorNS::ARENA_START_X + gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V + enemyNS::WIDTH*2);
+	e->setX(gladiatorNS::ARENA_START_X + gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V + enemyNS::WIDTH*2 + gladiatorNS::ENEMY_WALL_GAP_SIZE/2);
 	e->setY(gladiatorNS::ARENA_START_Y + gladiatorNS::ARENA_HEIGHT - enemyNS::HEIGHT);
 	e->setDegrees(180);
 	e->setVelocity(VECTOR2(enemyNS::SPEED,0));
@@ -370,6 +402,8 @@ void LaserGladiator::ai()
 
 void LaserGladiator::collisions()
 {
+	//need to add collision checks with main player unit
+	//along with that need to decrease health value and eliminate healthBarImage when they are hit
 	VECTOR2 collisionVector;
 	//check collision between all entities with lasers
 
@@ -431,6 +465,7 @@ void LaserGladiator::collisions()
 void LaserGladiator::render()
 {
 	graphics->spriteBegin();
+	//do all of the entity draws
 	for(int i = 0; i < walls.size(); i++)
 	{
 		walls[i]->draw();
@@ -451,7 +486,17 @@ void LaserGladiator::render()
 			lasers[i]->draw();
 		}
 	}
-	//do all of the entity draws
+	//display texts
+	stringstream score;
+	score << "Score: " << playerScore;
+	scoreText->print(score.str(),0,0);
+	//display health
+	healthTextImage->draw();
+	for(int i = 0; i < gladiatorNS::NUM_HEALTH_BARS; i++)
+	{
+		healthBarImages[i]->draw();
+	}
+
 	graphics->spriteEnd();
 }
 
@@ -464,6 +509,8 @@ void LaserGladiator::releaseAll()
 	mirrorTexture.onLostDevice();
 	enemyWallTexture.onLostDevice();
 	enemyTexture.onLostDevice();
+	healthTexture.onLostDevice();
+	scoreText->onLostDevice();
 	Game::releaseAll();
 	return;
 }
@@ -477,6 +524,8 @@ void LaserGladiator::resetAll()
 	mirrorTexture.onResetDevice();
 	enemyWallTexture.onResetDevice();
 	enemyTexture.onResetDevice();
+	healthTexture.onResetDevice();
+	scoreText->onResetDevice();
 	Game::resetAll();
 	return;
 }
