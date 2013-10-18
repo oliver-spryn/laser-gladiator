@@ -54,7 +54,6 @@ void Enemy::blowUp()
 
 void Enemy::fireLaser()
 {
-	//need to find way to identify horizontal vs. vertical laser
 	for(int i = 0; i < enemyNS::TOTAL_LASERS; i++)
 	{
 		//if there is an available laser use it 
@@ -67,6 +66,7 @@ void Enemy::fireLaser()
 			case UP:
 				yLocation-=50;
 				xSpeed = laserNS::SPEED/2;
+				ySpeed*=-1;
 				break;
 			case DOWN:
 				yLocation+=50;
@@ -75,6 +75,7 @@ void Enemy::fireLaser()
 			case LEFT:
 				xLocation-=50;
 				ySpeed = laserNS::SPEED/2;
+				xSpeed*=-1;
 				break;
 			case RIGHT:
 				xLocation+=50;
