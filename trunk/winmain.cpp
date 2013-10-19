@@ -8,8 +8,9 @@
 
 #include <crtdbg.h>
 #include <stdlib.h>
-#include "TestGame.h"
+//#include "TestGame.h"
 #include "Window.h"
+#include "laserGladiator.h"
 #include <Windows.h>
 
 // Function prototypes
@@ -17,7 +18,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int);
 LRESULT WINAPI WinProc(HWND, UINT, WPARAM, LPARAM); 
 
 // Game pointer
-TestGame *game = NULL;
+LaserGladiator *game = NULL;
 HWND hwnd = NULL;
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
@@ -29,7 +30,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 //Create the objects used through out this program
 	MSG msg;
 	Window win(hwnd, hInstance, nCmdShow);
-	game = new TestGame();
+	game = new LaserGladiator();
 
 	try {
 	//Create the game window

@@ -6,7 +6,7 @@
 #include "textureManager.h"
 #include "image.h"
 #include "wall.h"
-#include "LaserOld.h"
+#include "Laser.h"
 #include "Mirror.h"
 #include "enemy.h"
 #include "textDX.h"

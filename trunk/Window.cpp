@@ -7,7 +7,7 @@ Window::Window(HWND &hwnd, HINSTANCE hInstance, int nCmdShow) :
 }
 
 Window::~Window() {
-	DestroyWindow(*hwnd);
+	//DestroyWindow(*hwnd);
 }
 
 void Window::build() {

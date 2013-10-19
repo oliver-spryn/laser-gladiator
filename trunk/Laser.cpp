@@ -26,6 +26,7 @@ Laser::Laser(DWORD color) :
 	this->spriteData.y      = laserNS::Y;
 	this->velocity.x        = laserNS::VELOCITY;
 	this->velocity.y        = laserNS::VELOCITY;
+	mass = laserNS::MASS;
 }
 
 /**
@@ -199,6 +200,14 @@ void Laser::fireRad(float x, float y, float angle) {
 
 	//Activate the laser
 		this->activate(x, y);
+	}
+}
+
+void Laser::fire(float x, float y)
+{
+	if(!this->active)
+	{
+		this->activate(x,y);
 	}
 }
 
