@@ -29,6 +29,7 @@
 //-----------------------------------------------
 // graphic images
 const char LASER_IMAGE[] = "pictures\\laser.jpg";
+const char TURRET_IMAGE[] = "source\\pictures\\turret.png";
 const char WALL_IMAGE[] = "pictures\\wall.png";	//wall
 const char WALL_IMAGE_HORIZONTAL[] = "pictures\\hwall.png";//horizontal wall
 const char MIRROR_IMAGE[] = "pictures\\mirror.jpg";

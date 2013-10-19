@@ -6,12 +6,15 @@
 #include "game.h"
 #include "gameError.h"
 #include "Laser.h"
+#include "Player.h"
 #include "textureManager.h"
 
 class TestGame : public Game {
 private : 
 	TextureManager laserTexture;
+	TextureManager playerTexture;
 	Laser laser;
+	Player player;
 
 public : 
 	TestGame();
