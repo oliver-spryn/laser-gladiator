@@ -1,5 +1,5 @@
 #include "entity.h"
-#include "LaserOld.h"
+#include "Laser.h"
 #include "constants.h"
 
 enum Direction {UP,DOWN,LEFT,RIGHT};

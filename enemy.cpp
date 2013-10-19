@@ -59,33 +59,30 @@ void Enemy::fireLaser()
 		//if there is an available laser use it 
 		if(!lasers[i]->getActive())
 		{
-			int xLocation = spriteData.x,yLocation = spriteData.y,xSpeed = laserNS::SPEED,ySpeed=laserNS::SPEED;
+			int xLocation = spriteData.x,yLocation = spriteData.y,xSpeed = laserNS::VELOCITY,ySpeed=laserNS::VELOCITY;
 			//turret faces down
 			switch(direction)
 			{
 			case UP:
 				yLocation-=50;
-				xSpeed = laserNS::SPEED/2;
+				xSpeed = laserNS::VELOCITY/2;
 				ySpeed*=-1;
 				break;
 			case DOWN:
 				yLocation+=50;
-				xSpeed = laserNS::SPEED/2;
+				xSpeed = laserNS::VELOCITY/2;
 				break;
 			case LEFT:
 				xLocation-=50;
-				ySpeed = laserNS::SPEED/2;
+				ySpeed = laserNS::VELOCITY/2;
 				xSpeed*=-1;
 				break;
 			case RIGHT:
 				xLocation+=50;
-				ySpeed = laserNS::SPEED/2;
+				ySpeed = laserNS::VELOCITY/2;
 				break;
 			}
-			lasers[i]->setX(xLocation);
-			lasers[i]->setY(yLocation);
-			lasers[i]->setActive(true);
-			lasers[i]->setVisible(true);
+			lasers[i]->fire(xLocation, yLocation);
 			lasers[i]->setVelocity(VECTOR2(xSpeed,ySpeed));
 			break;
 		}

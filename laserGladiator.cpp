@@ -354,12 +354,13 @@ void LaserGladiator::initialize(HWND hwnd)
 	{
 		for(int j = 0; j < enemyNS::TOTAL_LASERS; j++)
 		{
-			if (!enemies[i]->getLasers()[j]->initialize(this, laserNS::WIDTH, laserNS::HEIGHT, laserNS::TEXTURE_COLS, &laserTexture))
+			if (!enemies[i]->getLasers()[j]->initialize(this, laserNS::HEAD_WIDTH, laserNS::HEAD_HEIGHT, laserNS::TEXTURE_COLS, &laserTexture))
 				throw(GameError(gameErrorNS::FATAL_ERROR, "error initializing laser"));
 			enemies[i]->getLasers()[j]->setX(0);
 			enemies[i]->getLasers()[j]->setY(0);
 			enemies[i]->getLasers()[j]->setVisible(false);
 			enemies[i]->getLasers()[j]->setActive(false);
+			enemies[i]->getLasers()[j]->setSelfDestructMethod(Laser::COLLISION_DESTROY,20);
 			//creates more pointers to control
 			lasers.push_back(enemies[i]->getLasers()[j]);
 		}
@@ -388,8 +389,8 @@ void LaserGladiator::update()
 	{
 		if(lasers[i]->getActive())
 		{
-			if(lasers[i]->getCollisions() > gladiatorNS::COLLISIONS_PER_LASER)
-				lasers[i]->loseEnergy();
+			//if(lasers[i]->getCollisions() > gladiatorNS::COLLISIONS_PER_LASER)
+			//	lasers[i]->destroy();
 			lasers[i]->update(frameTime);
 		}
 	}
@@ -446,7 +447,7 @@ void LaserGladiator::collisions()
 					lasers[j]->setVelocity(VECTOR2(lasers[j]->getVelocity().x*-1,lasers[j]->getVelocity().y));
 					//lasers[j]->setX((walls[i]->getX()>GAME_HEIGHT) ? walls[i]->getX() - 10 : walls[i]->getX() + 10);
 				}
-				lasers[j]->increaseCollisions();
+				lasers[j]->increaseCollision();
 			}
 		}
 	}
@@ -459,8 +460,7 @@ void LaserGladiator::collisions()
 			if(lasers[j]->collidesWith(*mirrors[i], collisionVector))
 			{
 				lasers[j]->bounce(collisionVector, *mirrors[i]);
-				lasers[j]->increaseCollisions();
-				//laser->setVelocity(VECTOR2(laserNS::SPEED,laserNS::SPEED));
+				lasers[j]->increaseCollision();
 			}
 		}
 	}
@@ -473,8 +473,7 @@ void LaserGladiator::collisions()
 			if(lasers[j]->collidesWith(*enemies[i], collisionVector))
 			{
 				lasers[j]->bounce(collisionVector, *enemies[i]);
-				lasers[j]->increaseCollisions();
-				//laser->setVelocity(VECTOR2(laserNS::SPEED,laserNS::SPEED));
+				lasers[j]->increaseCollision();
 				enemies[i]->blowUp();
 				playerScore+=100;
 				activeEnemies--;
