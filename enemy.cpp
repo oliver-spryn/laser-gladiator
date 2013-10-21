@@ -64,21 +64,21 @@ void Enemy::fireLaser()
 			switch(direction)
 			{
 			case UP:
-				yLocation-=50;
+				yLocation-=gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H;
 				xSpeed = laserNS::VELOCITY/2;
 				ySpeed*=-1;
 				break;
 			case DOWN:
-				yLocation+=50;
+				yLocation+=gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H;
 				xSpeed = laserNS::VELOCITY/2;
 				break;
 			case LEFT:
-				xLocation-=50;
+				xLocation-=gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V;
 				ySpeed = laserNS::VELOCITY/2;
 				xSpeed*=-1;
 				break;
 			case RIGHT:
-				xLocation+=50;
+				xLocation+=gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V;
 				ySpeed = laserNS::VELOCITY/2;
 				break;
 			}

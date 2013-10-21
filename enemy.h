@@ -17,7 +17,7 @@ public:
 	//use direction character to determine orientation instead of angle
 private:
 	int distanceToTravel;
-	Laser* lasers[3];
+	Laser* lasers[enemyNS::TOTAL_LASERS];
 	float distanceMoved;
 	Direction direction;
 };
