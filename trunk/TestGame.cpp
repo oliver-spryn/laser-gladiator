@@ -11,7 +11,19 @@ void TestGame::ai() {
 }
 
 void TestGame::collisions() {
+	VECTOR2 collisionVector;
 
+	//if (this->player.collidesWith(this->laser, collisionVector)) {
+	//	this->laser.bounce(collisionVector, this->player);
+	//}
+
+	if (this->player.mirrorCollidesWith(this->laser, collisionVector)) {
+		this->laser.destroy();
+	}
+
+	//if (this->player.turretCollidesWith(this->laser, collisionVector)) {
+	//	this->laser.bounce(collisionVector, this->player);
+	//}
 }
 
 void TestGame::initialize(HWND hwnd) {
@@ -22,18 +34,18 @@ void TestGame::initialize(HWND hwnd) {
 		throw GameError(gameErrorNS::FATAL_ERROR, "Error initializing the laser texture");
 
 //Initialize the player turret
-	if (!this->playerTexture.initialize(this->graphics, TURRET_IMAGE))
+	if (!this->playerTexture.initialize(this->graphics, TURRET_RING))
 		throw GameError(gameErrorNS::FATAL_ERROR, "Error initializing the player turret texture");
 
 //Initialize the laser object
 	if (!this->laser.initialize(this, 1, 1, 1, &this->laserTexture))
 		throw GameError(gameErrorNS::FATAL_ERROR, "Error initializing the laser object");
 
-//Initialize the plauer turret object
-	if (!this->player.initialize(this, 74, 104, 1, &this->playerTexture))
-		throw GameError(gameErrorNS::FATAL_ERROR, "Error initializing the player turret object");
-
-	this->laser.setSelfDestructMethod(Laser::TIMER_DESTROY, 5000);
+//Initialize the player turret object
+	if (!this->player.initialize(this, 71, 71, 1, &this->playerTexture))
+		throw GameError(gameErrorNS::FATAL_ERROR, "Error initializing the player turret ring object");
+	
+	this->laser.setSelfDestructMethod(Laser::TIMER_DESTROY, 20000);
 }
 
 void TestGame::releaseAll() {
