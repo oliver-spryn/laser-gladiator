@@ -375,6 +375,18 @@ void LaserGladiator::initialize(HWND hwnd)
 			lasers.push_back(enemies[i]->getLasers()[j]);
 		}
 	}
+	//player lasers
+	for(int i = 0; i < playerNS::TOTAL_LASERS; i++)
+	{
+		if(!player->getLasers()[i]->initialize(this,laserNS::HEAD_WIDTH,laserNS::HEAD_HEIGHT,laserNS::TEXTURE_COLS,&laserTexture))
+			throw(GameError(gameErrorNS::FATAL_ERROR,"error initializing player laser"));
+		player->getLasers()[i]->setX(0);
+		player->getLasers()[i]->setY(0);
+		player->getLasers()[i]->setVisible(false);
+		player->getLasers()[i]->setActive(false);
+		player->getLasers()[i]->setSelfDestructMethod(Laser::COLLISION_DESTROY,20);
+		lasers.push_back(player->getLasers()[i]);
+	}
 }
 
 void LaserGladiator::update()
@@ -382,7 +394,16 @@ void LaserGladiator::update()
 	//call updates for all entities
 	player->update(this->input->getMouseX(), this->input->getMouseY(), this->frameTime);
 	if (this->input->getMouseLButton()) {
-		;//this->player.fire(this->laser);
+		for(int i = 0; i < playerNS::TOTAL_LASERS; i++)
+		{
+			if(!player->getLasers()[i]->getActive())
+			{
+				debug << "fire!!!!\n";
+				player->fire(*player->getLasers()[i]);
+				input->setMouseLButton(false);
+				break;
+			}
+		}
 	}
 
 	for(int i = 0; i < walls.size(); i++)
@@ -421,10 +442,13 @@ void LaserGladiator::update()
 			for(int i = 0; i < enemies.size(); i++)
 			{
 				if(enemies[i]->getActive())
+				{
 					enemies[i]->fireLaser();
+					break;
+				}
 			}
 		}
-		numFrames=0;
+		numFrames=1;
 	}
 	numFrames++;
 	//end game
@@ -493,6 +517,18 @@ void LaserGladiator::collisions()
 				playerScore+=100;
 				activeEnemies--;
 			}
+		}
+	}
+
+	//collisions with player mirror
+	for(int i = 0; i < lasers.size(); i++)
+	{
+		if(player->getMirror().collidesWith(*lasers[i],collisionVector))
+		{
+			//lasers[i]->bounce(collisionVector,player->getMirror());
+			lasers[i]->increaseCollision(20);
+			playerScore--;
+			debug << "STUFF!!!\n";
 		}
 	}
 }

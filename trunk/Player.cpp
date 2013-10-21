@@ -15,6 +15,13 @@ Player::Player() : radians(PI / 2.0f) {
 	this->trueCenterX = playerNS::X + playerNS::WIDTH / 2;
 	this->trueCenterY = playerNS::Y + playerNS::HEIGHT / 2;
 	this->turretRadius = playerNS::HEIGHT / 2 + 6;
+
+	for(int i = 0; i < playerNS::TOTAL_LASERS; i++)
+	{
+		Laser* l = new Laser();
+		lasers[i] = l;
+		l=0;
+	}
 }
 
 void Player::draw() {
@@ -24,10 +31,7 @@ void Player::draw() {
 }
 
 void Player::fire(Laser &laser) {
-	//int x = this->trueCenterX - playerTurretNS::WIDTH + this->turretRadius * cos(this->radians + PI / 2);
-	//int y = this->trueCenterY - playerTurretNS::HEIGHT + this->turretRadius * sin(this->radians + PI / 2);
-
-	laser.fireRad(GAME_WIDTH / 2, GAME_HEIGHT / 2, -this->radians + 3*PI/2);
+	laser.fireRad(turret.getCenterX(), turret.getCenterY(), -this->radians + 3*PI/2);
 }
 
 bool Player::initialize(Game *gamePtr, int width, int height, int ncols, TextureManager *textureM) {
