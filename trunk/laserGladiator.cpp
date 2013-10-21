@@ -50,6 +50,7 @@ LaserGladiator::LaserGladiator()
 LaserGladiator::~LaserGladiator()
 {
 	debug.close();
+	SAFE_DELETE(player);
 	for(int i = 0; i < walls.size(); i++)
 	{
 		SAFE_DELETE(walls[i]);
@@ -112,6 +113,10 @@ void LaserGladiator::initialize(HWND hwnd)
 	if(!enemyTexture.initialize(graphics,ENEMY_IMAGE))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing enemy texture"));
 
+	//player texture
+	if(!playerTexture.initialize(graphics,TURRET_RING))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing enemy texture"));
+
 	//health texture
 	if(!healthTexture.initialize(graphics,HEALTH_IMAGE))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing health texture"));
@@ -138,6 +143,11 @@ void LaserGladiator::initialize(HWND hwnd)
 	}
 
 	//initialize all entities
+	//main player
+	player = new Player();
+	if (!player->initialize(this, 71, 71, 1, &this->playerTexture))
+		throw GameError(gameErrorNS::FATAL_ERROR, "Error initializing the player turret ring object");
+
 	//wall left
 	Wall* left = new Wall(gladiatorNS::ARENA_HEIGHT,gladiatorNS::WALL_WIDTH);
 	walls.push_back(left);
@@ -370,6 +380,11 @@ void LaserGladiator::initialize(HWND hwnd)
 void LaserGladiator::update()
 {
 	//call updates for all entities
+	player->update(this->input->getMouseX(), this->input->getMouseY(), this->frameTime);
+	if (this->input->getMouseLButton()) {
+		;//this->player.fire(this->laser);
+	}
+
 	for(int i = 0; i < walls.size(); i++)
 	{
 		walls[i]->update(frameTime);
@@ -473,7 +488,7 @@ void LaserGladiator::collisions()
 			if(lasers[j]->collidesWith(*enemies[i], collisionVector))
 			{
 				lasers[j]->bounce(collisionVector, *enemies[i]);
-				lasers[j]->increaseCollision();
+				lasers[j]->increaseCollision(gladiatorNS::COLLISIONS_PER_LASER);
 				enemies[i]->blowUp();
 				playerScore+=100;
 				activeEnemies--;
@@ -486,6 +501,8 @@ void LaserGladiator::render()
 {
 	graphics->spriteBegin();
 	//do all of the entity draws
+	player->draw();
+
 	for(int i = 0; i < walls.size(); i++)
 	{
 		walls[i]->draw();
@@ -530,6 +547,7 @@ void LaserGladiator::releaseAll()
 	enemyWallTexture.onLostDevice();
 	enemyTexture.onLostDevice();
 	healthTexture.onLostDevice();
+	playerTexture.onLostDevice();
 	scoreText->onLostDevice();
 	Game::releaseAll();
 	return;
@@ -545,6 +563,7 @@ void LaserGladiator::resetAll()
 	enemyWallTexture.onResetDevice();
 	enemyTexture.onResetDevice();
 	healthTexture.onResetDevice();
+	playerTexture.onResetDevice();
 	scoreText->onResetDevice();
 	Game::resetAll();
 	return;

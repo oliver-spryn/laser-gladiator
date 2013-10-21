@@ -66,7 +66,7 @@ void Player::update(int mouseX, int mouseY, float frameTime) {
 //Calculate the necessary angle for the turret based on the X and Y location of the pointer
 	int newX = mouseX - GAME_WIDTH / 2;
 	int newY = GAME_HEIGHT / 2 - mouseY;
-	this->radians = atan2(newX, newY);
+	this->radians = atan2((float)newX, (float)newY);
 
 //Set the angle and position of the mirror
 	this->mirror.setRadians(this->radians);

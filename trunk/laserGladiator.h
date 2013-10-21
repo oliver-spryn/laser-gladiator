@@ -10,6 +10,7 @@
 #include "Mirror.h"
 #include "enemy.h"
 #include "textDX.h"
+#include "Player.h"
 #include <vector>
 using std::vector;
 #include <ctime>
@@ -29,7 +30,8 @@ class LaserGladiator : public Game
 {
 private:
 	//game items
-	TextureManager wallTexture, laserTexture, hWallTexture, mirrorTexture, enemyWallTexture, hEnemyWallTexture, enemyTexture, healthTexture;
+	TextureManager wallTexture, laserTexture, hWallTexture, mirrorTexture, enemyWallTexture, hEnemyWallTexture, enemyTexture, healthTexture, playerTexture;
+	Player* player;
 	int numWalls;
 	vector<Wall*> walls;
 	int numMirrors;
