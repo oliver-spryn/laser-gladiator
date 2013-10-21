@@ -18,7 +18,7 @@ Laser::Laser(DWORD color) :
 	collisions(0), color(color), destroyConst(0), destroyCounter(0), destroyMethod(Laser::NO_DESTROY),
 	destroyPending(false), lastPixelIndex(0), timeConst(1000.0 / CLOCKS_PER_SEC), timeStart(0),
 	tailImages(laserNS::TAIL, Image()) {
-	this->collisionType     = entityNS::BOX;
+	this->collisionType     = entityNS::ROTATED_BOX;
 	this->spriteData.height = laserNS::HEAD_HEIGHT;
 	this->spriteData.scale  = 1;
 	this->spriteData.width  = laserNS::HEAD_WIDTH;

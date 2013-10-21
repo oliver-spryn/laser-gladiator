@@ -28,8 +28,10 @@
 //                  Constants
 //-----------------------------------------------
 // graphic images
-const char LASER_IMAGE[] = "pictures\\laser.jpg";
-const char TURRET_IMAGE[] = "source\\pictures\\turret.png";
+const char LASER_IMAGE[] = "source\\pictures\\laser.jpg";
+const char TURRET[] = "source\\pictures\\turret.png";
+const char TURRET_RING[] = "source\\pictures\\ring.png";
+const char TURRET_MIRROR[] = "source\\pictures\\turret-mirror.png";
 const char WALL_IMAGE[] = "pictures\\wall.png";	//wall
 const char WALL_IMAGE_HORIZONTAL[] = "pictures\\hwall.png";//horizontal wall
 const char MIRROR_IMAGE[] = "pictures\\mirror.jpg";
