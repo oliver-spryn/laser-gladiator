@@ -18,8 +18,8 @@ namespace playerNS {
     const int HEIGHT = 71;                            // Height of the image
 	const int MASS   = 1;                             // The mass of the object
 	const int WIDTH  = 71;                            // Width of the image
-    const int X      = GAME_WIDTH / 2 - WIDTH / 2;    // X position of the image
-    const int Y      = GAME_HEIGHT / 2 - HEIGHT / 2;  // Y position of the image
+    const int X      = gladiatorNS::ARENA_START_X + gladiatorNS::ARENA_WIDTH/2 - gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H;    // X position of the image
+    const int Y      = gladiatorNS::ARENA_START_Y + gladiatorNS::ARENA_HEIGHT/2 - gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V;  // Y position of the image
 }
 
 class Player : public Entity {
