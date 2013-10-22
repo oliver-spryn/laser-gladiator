@@ -28,17 +28,17 @@
 //                  Constants
 //-----------------------------------------------
 // graphic images
-const char LASER_IMAGE[] = "pictures\\laser.jpg";
-const char TURRET[] = "pictures\\turret.png";
-const char TURRET_RING[] = "pictures\\ring.png";
-const char TURRET_MIRROR[] = "pictures\\turret-mirror.png";
-const char WALL_IMAGE[] = "pictures\\wall.png";	//wall
-const char WALL_IMAGE_HORIZONTAL[] = "pictures\\hwall.png";//horizontal wall
-const char MIRROR_IMAGE[] = "pictures\\mirror.jpg";
-const char ENEMY_WALL_IMAGE[] = "pictures\\enemyWall.png";
-const char ENEMY_IMAGE[] = "pictures\\enemy.jpg";
-const char ENEMY_WALL_IMAGE_HORIZONTAL[] = "pictures\\hEnemyWall.png";
-const char HEALTH_IMAGE[] = "pictures\\HealthText.png";
+const char LASER_IMAGE[] = "source\\pictures\\laser.jpg";
+const char TURRET[] = "source\\pictures\\turret.png";
+const char TURRET_RING[] = "source\\pictures\\ring.png";
+const char TURRET_MIRROR[] = "source\\pictures\\turret-mirror.png";
+const char WALL_IMAGE[] = "source\\pictures\\wall.png";	//wall
+const char WALL_IMAGE_HORIZONTAL[] = "source\\pictures\\hwall.png";//horizontal wall
+const char MIRROR_IMAGE[] = "source\\pictures\\mirror.jpg";
+const char ENEMY_WALL_IMAGE[] = "source\\pictures\\enemyWall.png";
+const char ENEMY_IMAGE[] = "source\\pictures\\enemy.jpg";
+const char ENEMY_WALL_IMAGE_HORIZONTAL[] = "source\\pictures\\hEnemyWall.png";
+const char HEALTH_IMAGE[] = "source\\pictures\\HealthText.png";
 
 // window
 const char CLASS_NAME[] = "LaserGladiator";
@@ -72,6 +72,7 @@ namespace enemyNS
     const float MASS = 0.0f;    
     const int   TEXTURE_COLS = 1;
 	const int	TOTAL_LASERS=3;
+	const int	HITS_TO_KILL = 3;
 }
 
 namespace gladiatorNS
@@ -89,6 +90,8 @@ namespace gladiatorNS
 	const int DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V = 2*enemyNS::WIDTH;
 	const float MIRROR_SIZE = 0.75;
 	const int NUM_HEALTH_BARS = 10;
+	const int POINTS_ENEMY_KILLED = 100;
+	const int POINTS_DEFLECTION = 5;
 }
 
 

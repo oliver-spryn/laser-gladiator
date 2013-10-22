@@ -10,9 +10,13 @@ namespace playerTurretNS {
 }
 
 class PlayerTurret : public Entity {
+private:
+	COLOR_ARGB color;
+
 public : 
 	PlayerTurret();
-
+	void setColor(COLOR_ARGB c) {color = c;}
+	COLOR_ARGB getColor() {return color;}
 	// Updates to this object will be managed by the Player class
 };
 

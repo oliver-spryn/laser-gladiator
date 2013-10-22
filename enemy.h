@@ -14,8 +14,13 @@ public:
 	void fireLaser();
 	char getDirection() { return direction; }
 	void setDirection(Direction x) {direction = x;}
+	COLOR_ARGB getColor() {return color;}
+	void setColor(COLOR_ARGB c) {color = c;}
 	//use direction character to determine orientation instead of angle
 private:
+	COLOR_ARGB color;
+	int aValue;
+	int numHits;
 	int distanceToTravel;
 	Laser* lasers[enemyNS::TOTAL_LASERS];
 	float distanceMoved;

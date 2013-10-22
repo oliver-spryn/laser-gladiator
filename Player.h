@@ -33,11 +33,14 @@ private :
 	int trueCenterY;
 	PlayerTurret turret;
 	int turretRadius;
+	int playerHealth;
 	TextureManager turretTexture;
 	Laser* lasers[playerNS::TOTAL_LASERS];
 
 public : 
 	Player();
+	int getHealth() {return playerHealth;}
+	void reduceHealth(int hit) {playerHealth-=hit;}
 	PlayerMirror getMirror() {return mirror;}
 	PlayerTurret getTurret() {return turret;}
 	Laser** getLasers() {return lasers;}

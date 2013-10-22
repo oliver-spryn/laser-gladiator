@@ -269,6 +269,7 @@ void LaserGladiator::initialize(HWND hwnd)
 	e->setY(gladiatorNS::ARENA_START_Y + gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H + enemyNS::WIDTH/2);
 	e->setVelocity(VECTOR2(0,enemyNS::SPEED));
 	e->setDegrees(270);
+	e->setColor(graphicsNS::RED);
 	enemies.push_back(e);
 	e=0;
 
@@ -281,6 +282,7 @@ void LaserGladiator::initialize(HWND hwnd)
 	e->setDegrees(90);
 	e->setVelocity(VECTOR2(0,-enemyNS::SPEED));
 	e->setDirection(LEFT);
+	e->setColor(graphicsNS::RED);
 	enemies.push_back(e);
 	e=0;
 
@@ -293,6 +295,7 @@ void LaserGladiator::initialize(HWND hwnd)
 	e->setY(gladiatorNS::ARENA_START_Y + enemyNS::HEIGHT/3);
 	e->setVelocity(VECTOR2(-enemyNS::SPEED,0));
 	e->setDirection(DOWN);
+	e->setColor(graphicsNS::RED);
 	enemies.push_back(e);
 	e=0;
 
@@ -305,6 +308,7 @@ void LaserGladiator::initialize(HWND hwnd)
 	e->setDegrees(180);
 	e->setVelocity(VECTOR2(enemyNS::SPEED,0));
 	e->setDirection(UP);
+	e->setColor(graphicsNS::RED);
 	enemies.push_back(e);
 	e=0;
 
@@ -398,7 +402,6 @@ void LaserGladiator::update()
 		{
 			if(!player->getLasers()[i]->getActive())
 			{
-				debug << "fire!!!!\n";
 				player->fire(*player->getLasers()[i]);
 				input->setMouseLButton(false);
 				break;
@@ -452,9 +455,15 @@ void LaserGladiator::update()
 	}
 	numFrames++;
 	//end game
+	//player wins
 	if(activeEnemies == 0)
 	{
 		endGamePlayerWins();
+	}
+	//player dies
+	if(player->getHealth()==0)
+	{
+		endGamePlayerLoses();
 	}
 }
 
@@ -474,7 +483,7 @@ void LaserGladiator::collisions()
 	{
 		for(int j = 0; j < lasers.size(); j++)
 		{
-			if(lasers[j]->collidesWith(*walls[i],collisionVector))
+			if(lasers[j]->getActive() && lasers[j]->collidesWith(*walls[i],collisionVector))
 			{
 				if(walls[i]->getWidth() > walls[i]->getHeight())
 				{
@@ -496,7 +505,7 @@ void LaserGladiator::collisions()
 	{
 		for(int j = 0; j < lasers.size(); j++)
 		{
-			if(lasers[j]->collidesWith(*mirrors[i], collisionVector))
+			if(lasers[j]->getActive() && lasers[j]->collidesWith(*mirrors[i], collisionVector))
 			{
 				lasers[j]->bounce(collisionVector, *mirrors[i]);
 				lasers[j]->increaseCollision();
@@ -504,18 +513,19 @@ void LaserGladiator::collisions()
 		}
 	}
 
-	//collisions with turrets
+	//collisions with enemy turrets
 	for(int i = 0; i < enemies.size(); i++)
 	{
 		for(int j = 0; j < lasers.size(); j++)
 		{
-			if(lasers[j]->collidesWith(*enemies[i], collisionVector))
+			if(!lasers[j]->getDestruct() && lasers[j]->getActive() && lasers[j]->collidesWith(*enemies[i], collisionVector))
 			{
-				lasers[j]->bounce(collisionVector, *enemies[i]);
-				lasers[j]->increaseCollision(gladiatorNS::COLLISIONS_PER_LASER);
+				lasers[j]->destroy();
 				enemies[i]->blowUp();
-				playerScore+=100;
-				activeEnemies--;
+				playerScore+=gladiatorNS::POINTS_ENEMY_KILLED;
+				//only reduces number if enemy is eliminated
+				if(!enemies[i]->getActive())
+					activeEnemies--;
 			}
 		}
 	}
@@ -523,12 +533,38 @@ void LaserGladiator::collisions()
 	//collisions with player mirror
 	for(int i = 0; i < lasers.size(); i++)
 	{
-		if(player->getMirror().collidesWith(*lasers[i],collisionVector))
+		//checks if the laser is being destroyed
+		if(!lasers[i]->getDestruct() && lasers[i]->getActive() && player->getMirror().collidesWith(*lasers[i],collisionVector))
 		{
-			//lasers[i]->bounce(collisionVector,player->getMirror());
-			lasers[i]->increaseCollision(20);
-			playerScore--;
-			debug << "STUFF!!!\n";
+			lasers[i]->bounce(collisionVector,player->getMirror());
+			playerScore+=gladiatorNS::POINTS_DEFLECTION;
+		}
+	}
+	//collision with exposed player circie
+	for(int i = 0; i < lasers.size(); i++)
+	{
+		//checks if laser is being destroyed
+		if(!lasers[i]->getDestruct() && lasers[i]->getActive() && player->collidesWith(*lasers[i],collisionVector))
+		{
+			lasers[i]->destroy();
+			if(lasers[i]->getEnemyLaser())
+			{
+				player->reduceHealth(1);
+				healthBarImages[player->getHealth()]->setVisible(false);
+			}
+		}
+	}
+	//collision with player turret
+	for(int i = 0; i < lasers.size(); i++)
+	{
+		if(!lasers[i]->getDestruct() && lasers[i]->getActive() && player->getTurret().collidesWith(*lasers[i],collisionVector))
+		{
+			if(lasers[i]->getEnemyLaser())
+			{
+				lasers[i]->destroy();
+				player->getTurret().setActive(false);
+				player->getTurret().setColor(graphicsNS::GRAY);
+			}
 		}
 	}
 }
@@ -550,7 +586,7 @@ void LaserGladiator::render()
 	for(int i = 0; i < enemies.size(); i++)
 	{
 		if(enemies[i]->getActive())
-			enemies[i]->draw();
+			enemies[i]->draw(enemies[i]->getColor());
 	}
 	for(int i = 0; i < lasers.size(); i++)
 	{
@@ -567,7 +603,7 @@ void LaserGladiator::render()
 	healthTextImage->draw();
 	for(int i = 0; i < gladiatorNS::NUM_HEALTH_BARS; i++)
 	{
-		healthBarImages[i]->draw();
+		healthBarImages[i]->draw(graphicsNS::CYAN);
 	}
 
 	graphics->spriteEnd();
@@ -608,5 +644,12 @@ void LaserGladiator::resetAll()
 void LaserGladiator::endGamePlayerWins()
 {
 	//do something cool here
+	exitGame();
+}
+
+void LaserGladiator::endGamePlayerLoses()
+{
+	//do something cool here
+	
 	exitGame();
 }
