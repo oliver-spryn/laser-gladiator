@@ -39,6 +39,8 @@ private :
 
 public : 
 	Player();
+	void setTurretActive(bool a) {turret.setActive(a);}
+	void setTurretColor(COLOR_ARGB c) {turret.setColor(c);}
 	int getHealth() {return playerHealth;}
 	void reduceHealth(int hit) {playerHealth-=hit;}
 	PlayerMirror getMirror() {return mirror;}

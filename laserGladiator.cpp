@@ -540,6 +540,7 @@ void LaserGladiator::collisions()
 			playerScore+=gladiatorNS::POINTS_DEFLECTION;
 		}
 	}
+
 	//collision with exposed player circie
 	for(int i = 0; i < lasers.size(); i++)
 	{
@@ -554,16 +555,17 @@ void LaserGladiator::collisions()
 			}
 		}
 	}
+
 	//collision with player turret
 	for(int i = 0; i < lasers.size(); i++)
 	{
-		if(!lasers[i]->getDestruct() && lasers[i]->getActive() && player->getTurret().collidesWith(*lasers[i],collisionVector))
+		if(lasers[i]->getDestruct() && lasers[i]->getActive() && player->getTurret().collidesWith(*lasers[i],collisionVector))
 		{
 			if(lasers[i]->getEnemyLaser())
 			{
 				lasers[i]->destroy();
-				player->getTurret().setActive(false);
-				player->getTurret().setColor(graphicsNS::GRAY);
+				player->setTurretActive(false);
+				player->setTurretColor(graphicsNS::GRAY);
 			}
 		}
 	}

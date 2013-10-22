@@ -51,6 +51,7 @@ void Enemy::update(float frameTime)
 
 void Enemy::blowUp()
 {
+	numHits++;
 	if(numHits >= enemyNS::HITS_TO_KILL)
 	{
 		this->setActive(false);
@@ -58,9 +59,8 @@ void Enemy::blowUp()
 	}
 	else
 	{
-		numHits++;
 		//slowy decreases the visibility of turret until it is destroyed
-		aValue -= (numHits*(150/enemyNS::HITS_TO_KILL));
+		aValue -= (200/enemyNS::HITS_TO_KILL);
 		color = SETCOLOR_ARGB(aValue,255,0,0);
 	}
 }
