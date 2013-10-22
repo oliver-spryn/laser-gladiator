@@ -45,7 +45,7 @@ private:
 	int playerScore;
 	int numFrames;
 	int activeEnemies;
-	TextDX* scoreText;
+	TextDX scoreText;
 
 public:
 	ofstream debug;
