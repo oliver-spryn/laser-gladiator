@@ -40,6 +40,10 @@ const char ENEMY_IMAGE[] = "source\\pictures\\enemy.jpg";
 const char ENEMY_WALL_IMAGE_HORIZONTAL[] = "source\\pictures\\hEnemyWall.png";
 const char HEALTH_IMAGE[] = "source\\pictures\\HealthText.png";
 
+//audio stuff
+const char WAVE_BANK[] = "";
+const char SOUND_BANK[] = "";
+
 // window
 const char CLASS_NAME[] = "LaserGladiator";
 const char GAME_TITLE[] = "Laser Gladiator";

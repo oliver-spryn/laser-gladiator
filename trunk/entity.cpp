@@ -1,7 +1,7 @@
 // Programming 2D Games
 // Copyright (c) 2011 by: 
 // Charles Kelly
-// Chapter 6 entity.cpp v1.3
+// entity.cpp v1.3
 
 #include "entity.h"
 
@@ -40,6 +40,7 @@ bool Entity::initialize(Game *gamePtr, int width, int height, int ncols,
                             TextureManager *textureM)
 {
     input = gamePtr->getInput();                // the input system
+    audio = gamePtr->getAudio();                // the audio system
     return(Image::initialize(gamePtr->getGraphics(), width, height, ncols, textureM));
 }
 

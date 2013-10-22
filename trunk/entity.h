@@ -1,7 +1,7 @@
 // Programming 2D Games
 // Copyright (c) 2011 by: 
 // Charles Kelly
-// Chapter 6 entity.h v1.0
+// entity.h v1.0
 
 #ifndef _ENTITY_H               // Prevent multiple definitions if this 
 #define _ENTITY_H               // file is included in more than one place
@@ -40,6 +40,7 @@ class Entity : public Image
     float   force;          // Force of gravity
     float   gravity;        // gravitational constant of the game universe
     Input   *input;         // pointer to the input system
+    Audio   *audio;         // pointer to audio system
     HRESULT hr;             // standard return type
     bool    active;         // only active entities may collide
     bool    rotatedBoxReady;    // true when rotated collision box is ready

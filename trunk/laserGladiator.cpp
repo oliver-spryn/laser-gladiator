@@ -72,15 +72,16 @@ LaserGladiator::~LaserGladiator()
 	{
 		SAFE_DELETE(healthBarImages[i]);
 	}
+	SAFE_DELETE(audio);
 	releaseAll();
 }
 
 void LaserGladiator::initialize(HWND hwnd)
 {
 	Game::initialize(hwnd);
+
 	//initialize texts
-	scoreText = new TextDX();
-	if(scoreText->initialize(graphics, 24, false, false, "Dotum") == false)
+	if(scoreText.initialize(graphics, 24, false, false, "Dotum") == false)
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing DirectX font"));
 
 	//initialize all textures
@@ -600,7 +601,7 @@ void LaserGladiator::render()
 	//display texts
 	stringstream score;
 	score << "Score: " << playerScore;
-	scoreText->print(score.str(),0,0);
+	scoreText.print(score.str(),0,0);
 	//display health
 	healthTextImage->draw();
 	for(int i = 0; i < gladiatorNS::NUM_HEALTH_BARS; i++)
@@ -622,7 +623,7 @@ void LaserGladiator::releaseAll()
 	enemyTexture.onLostDevice();
 	healthTexture.onLostDevice();
 	playerTexture.onLostDevice();
-	scoreText->onLostDevice();
+	scoreText.onLostDevice();
 	Game::releaseAll();
 	return;
 }
@@ -638,7 +639,7 @@ void LaserGladiator::resetAll()
 	enemyTexture.onResetDevice();
 	healthTexture.onResetDevice();
 	playerTexture.onResetDevice();
-	scoreText->onResetDevice();
+	scoreText.onResetDevice();
 	Game::resetAll();
 	return;
 }

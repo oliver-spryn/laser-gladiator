@@ -1,7 +1,7 @@
 // Programming 2D Games
 // Copyright (c) 2011 by: 
 // Charles Kelly
-// Chapter 6 game.h v1.0
+// Chapter 7 game.h v1.0
 
 #ifndef _GAME_H                 // Prevent multiple definitions if this 
 #define _GAME_H                 // file is included in more than one place
@@ -11,6 +11,7 @@
 #include <Mmsystem.h>
 #include "graphics.h"
 #include "input.h"
+#include "audio.h"
 #include "constants.h"
 #include "gameError.h"
 
@@ -20,6 +21,7 @@ protected:
     // common game properties
     Graphics *graphics;         // pointer to Graphics
     Input   *input;             // pointer to Input
+    Audio   *audio;             // pointer to Audio
     HWND    hwnd;               // window handle
     HRESULT hr;                 // standard return type
     LARGE_INTEGER timeStart;    // Performance Counter start value
@@ -76,6 +78,10 @@ public:
 
     // Exit the game
     void exitGame()         {PostMessage(hwnd, WM_DESTROY, 0, 0);}
+
+    // Return pointer to Audio.
+    Audio* getAudio()       {return audio;}
+
 
     // Pure virtual function declarations
     // These functions MUST be written in any class that inherits from Game
