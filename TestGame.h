@@ -3,6 +3,7 @@
 #define WIN32_LEAN_AND_MEAN
 
 #include "constants.h"
+#include "Explode.h"
 #include "game.h"
 #include "gameError.h"
 #include "Laser.h"
@@ -11,6 +12,7 @@
 
 class TestGame : public Game {
 private : 
+	Explode* e;
 	TextureManager laserTexture;
 	TextureManager playerTexture;
 	Laser laser;

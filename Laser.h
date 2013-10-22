@@ -30,8 +30,8 @@ using std::clock_t;
 using std::vector;
 
 namespace laserNS {
-	const int HEAD_HEIGHT = 1;     // Height of the head pixel of the laser
-	const int HEAD_WIDTH  = 1;     // Width of the head pixel of the laser
+	const int HEAD_HEIGHT = 10;     // Height of the head pixel of the laser
+	const int HEAD_WIDTH  = 10;     // Width of the head pixel of the laser
 	const int TAIL        = 50;    // Length of the laser's tail, in pixels, not including the head
 	const int VELOCITY    = 250;   // Laser velocity, both X and Y
 	const int X           = 2;     // Default location of the head pixel of the laser
