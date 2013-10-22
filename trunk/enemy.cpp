@@ -2,6 +2,8 @@
 
 Enemy::Enemy(Direction direction)
 {
+	numHits = 0;
+	aValue = 255;
 	this->direction = direction;
 	spriteData.width = enemyNS::WIDTH;           // size of enemy
     spriteData.height = enemyNS::HEIGHT;
@@ -24,6 +26,7 @@ Enemy::Enemy(Direction direction)
 	for(int i = 0; i < enemyNS::TOTAL_LASERS; i++)
 	{
 		lasers[i] = new Laser();
+		lasers[i]->setEnemyLaser(true);
 	}
 	distanceToTravel = (direction == LEFT||direction == RIGHT)?gladiatorNS::ARENA_HEIGHT-gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H*2 - enemyNS::WIDTH*2:
 		gladiatorNS::ARENA_WIDTH-gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V*2 - gladiatorNS::ENEMY_WALL_GAP_SIZE * 2 - enemyNS::HEIGHT*2;
@@ -48,8 +51,18 @@ void Enemy::update(float frameTime)
 
 void Enemy::blowUp()
 {
-	this->setActive(false);
-	this->setVisible(false);
+	if(numHits >= enemyNS::HITS_TO_KILL)
+	{
+		this->setActive(false);
+		this->setVisible(false);
+	}
+	else
+	{
+		numHits++;
+		//slowy decreases the visibility of turret until it is destroyed
+		aValue -= (numHits*(150/enemyNS::HITS_TO_KILL));
+		color = SETCOLOR_ARGB(aValue,255,0,0);
+	}
 }
 
 void Enemy::fireLaser()
@@ -59,26 +72,26 @@ void Enemy::fireLaser()
 		//if there is an available laser use it 
 		if(!lasers[i]->getActive())
 		{
-			int xLocation = spriteData.x,yLocation = spriteData.y,xSpeed = laserNS::VELOCITY,ySpeed=laserNS::VELOCITY;
+			float xLocation = spriteData.x,yLocation = spriteData.y,xSpeed = laserNS::VELOCITY,ySpeed=laserNS::VELOCITY;
 			//turret faces down
 			switch(direction)
 			{
 			case UP:
-				yLocation-=gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H;
+				yLocation = gladiatorNS::ARENA_START_Y + gladiatorNS::ARENA_HEIGHT - gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H - gladiatorNS::WALL_WIDTH*2;
 				xSpeed = laserNS::VELOCITY/2;
 				ySpeed*=-1;
 				break;
 			case DOWN:
-				yLocation+=gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H;
+				yLocation=gladiatorNS::ARENA_START_Y + gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H + gladiatorNS::WALL_WIDTH*2;
 				xSpeed = laserNS::VELOCITY/2;
 				break;
 			case LEFT:
-				xLocation-=gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V;
+				xLocation=gladiatorNS::ARENA_START_X + gladiatorNS::ARENA_WIDTH - gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V - gladiatorNS::WALL_WIDTH*2;
 				ySpeed = laserNS::VELOCITY/2;
 				xSpeed*=-1;
 				break;
 			case RIGHT:
-				xLocation+=gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V;
+				xLocation=gladiatorNS::ARENA_START_X + gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V + gladiatorNS::WALL_WIDTH*2;
 				ySpeed = laserNS::VELOCITY/2;
 				break;
 			}

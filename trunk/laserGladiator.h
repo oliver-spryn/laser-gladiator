@@ -65,6 +65,7 @@ public:
     void releaseAll();
     void resetAll();
 	void endGamePlayerWins();
+	void endGamePlayerLoses();
 };
 
 #endif

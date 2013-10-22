@@ -33,7 +33,7 @@ namespace laserNS {
 	const int HEAD_HEIGHT = 1;     // Height of the head pixel of the laser
 	const int HEAD_WIDTH  = 1;     // Width of the head pixel of the laser
 	const int TAIL        = 50;    // Length of the laser's tail, in pixels, not including the head
-	const int VELOCITY    = 300;   // Laser velocity, both X and Y
+	const int VELOCITY    = 250;   // Laser velocity, both X and Y
 	const int X           = 2;     // Default location of the head pixel of the laser
 	const int Y           = 2;     // Default location of the head pixel of the laser
 	const int TEXTURE_COLS = 1;
@@ -48,6 +48,7 @@ private :
 	int destroyCounter;
 	char destroyMethod;
 	bool destroyPending;
+	bool enemyLaser;
 	int lastPixelIndex;
 	vector<Image> tailImages;
 	double timeConst;
@@ -73,11 +74,14 @@ public :
 	void fireDeg(float x, float y, float angle);
 	void fireRad(float x, float y, float angle);
 	void fire(float x, float y);
+	bool getEnemyLaser() {return enemyLaser;}
+	void setEnemyLaser(bool type) {enemyLaser = type;}
 	int getCollisions();
 	void increaseCollision(int number = 1);
 	bool initialize(Game *gamePtr, int width, int height, int ncols, TextureManager *textureM);
 	void setSelfDestructMethod(char method, int destroyConst = 0);
 	void update(float frameTime);
+	bool getDestruct() {return destroyPending;}
 };
 
 #endif

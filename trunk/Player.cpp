@@ -18,20 +18,23 @@ Player::Player() : radians(PI / 2.0f) {
 
 	for(int i = 0; i < playerNS::TOTAL_LASERS; i++)
 	{
-		Laser* l = new Laser();
+		Laser* l = new Laser(graphicsNS::BLUE);
+		l->setEnemyLaser(false);
 		lasers[i] = l;
 		l=0;
 	}
+	playerHealth = gladiatorNS::NUM_HEALTH_BARS;
 }
 
 void Player::draw() {
 	Image::draw();
 	this->mirror.draw();
-	this->turret.draw();
+	this->turret.draw(turret.getColor());
 }
 
 void Player::fire(Laser &laser) {
-	laser.fireRad(turret.getCenterX(), turret.getCenterY(), -this->radians + 3*PI/2);
+	if(turret.getActive())
+		laser.fireRad(turret.getCenterX(), turret.getCenterY(), -this->radians + 3*PI/2);
 }
 
 bool Player::initialize(Game *gamePtr, int width, int height, int ncols, TextureManager *textureM) {
@@ -52,6 +55,7 @@ bool Player::initialize(Game *gamePtr, int width, int height, int ncols, Texture
 //Initialize the turret object
 	if (!this->turret.initialize(gamePtr, playerTurretNS::WIDTH, playerTurretNS::HEIGHT, 1, &this->turretTexture))
 		throw GameError(gameErrorNS::FATAL_ERROR, "Error initializing the player turret object");
+	turret.setColor(SETCOLOR_ARGB(255,152,254,178));
 
 	return retVal;
 }
