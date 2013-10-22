@@ -28,6 +28,11 @@
 //                  Constants
 //-----------------------------------------------
 // graphic images
+const char FLARE_ONE_IMAGE[] = "source\\pictures\\flare-one.png";
+const char FLARE_TWO_IMAGE[] = "source\\pictures\\flare-two.png";
+const char SPARK_TEXTURE[] = "source\\pictures\\spark.jpg";
+
+
 const char LASER_IMAGE[] = "source\\pictures\\laser.jpg";
 const char TURRET[] = "source\\pictures\\turret.png";
 const char TURRET_RING[] = "source\\pictures\\ring.png";

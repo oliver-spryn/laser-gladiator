@@ -46,6 +46,8 @@ void TestGame::initialize(HWND hwnd) {
 		throw GameError(gameErrorNS::FATAL_ERROR, "Error initializing the player turret ring object");
 	
 	this->laser.setSelfDestructMethod(Laser::TIMER_DESTROY, 20000);
+
+	e = new Explode(this->graphics, this);
 }
 
 void TestGame::releaseAll() {
@@ -57,6 +59,7 @@ void TestGame::render() {
 	this->graphics->spriteBegin();
 	this->laser.draw();
 	this->player.draw();
+	e->explodeAt(400, 300);
     this->graphics->spriteEnd();   
 }
 
