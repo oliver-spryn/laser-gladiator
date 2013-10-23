@@ -64,7 +64,7 @@ void Explode::explodeAt(int x, int y) {
 		} else if (this->flareOneAlpha > 0) {
 			this->flareOneAlpha -= explodeNS::FLARE_FADE_CONST;
 
-			if (this->flareOneAlpha <= 0) {
+			if (this->flareOneAlpha <= explodeNS::FLARE_FADE_CONST) {
 				this->flareOneAlpha = 1;
 			}
 
@@ -75,7 +75,7 @@ void Explode::explodeAt(int x, int y) {
 		} else {
 			this->flareTwoAlpha -= explodeNS::FLARE_FADE_CONST;
 
-			if (this->flareTwoAlpha <= 0) {
+			if (this->flareTwoAlpha <= explodeNS::FLARE_FADE_CONST) {
 				this->flareTwoAlpha = 1;
 			}
 
