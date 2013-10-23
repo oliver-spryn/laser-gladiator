@@ -38,7 +38,7 @@ class LaserGladiator : public Game
 {
 private:
 	//game items
-	TextureManager wallTexture, laserTexture, hWallTexture, mirrorTexture, enemyWallTexture, hEnemyWallTexture, enemyTexture, healthTexture, playerTexture, faceTexture;
+	TextureManager wallTexture, laserTexture, hWallTexture, mirrorTexture, enemyWallTexture, hEnemyWallTexture, enemyTexture, healthTexture, playerTexture, faceLTexture, faceWTexture;
 	Player* player;
 	int numWalls;
 	vector<Wall*> walls;
@@ -51,7 +51,9 @@ private:
 	vector<Explode*> explosions;
 	Image* healthTextImage;
 	Image* healthBarImages[gladiatorNS::NUM_HEALTH_BARS];
-	Image* face;
+	Image* faceL;
+	Image* faceW;
+	int index;
 	int rows, columns;
 	int playerScore;
 	int numFrames;
