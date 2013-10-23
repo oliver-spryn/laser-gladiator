@@ -31,7 +31,8 @@
 const char FLARE_ONE_IMAGE[] = "source\\pictures\\flare-one.png";
 const char FLARE_TWO_IMAGE[] = "source\\pictures\\flare-two.png";
 const char SPARK_TEXTURE[] = "source\\pictures\\spark.jpg";
-const char FACE[] = "source\\pictures\\birmingham.jpg";
+const char FACE_LOOSE[] = "source\\pictures\\birmingham.jpg";
+const char FACE_WIN[] = "source\\pictures\\birmingham-win.jpg";
 
 const char LASER_IMAGE[] = "source\\pictures\\laser.jpg";
 const char TURRET[] = "source\\pictures\\turret.png";

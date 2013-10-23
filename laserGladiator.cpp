@@ -3,6 +3,7 @@
 LaserGladiator::LaserGladiator()
 {
 	winSauce = failSauce = false;
+	index = 0;
 	healthTextImage = new Image();
 	activeEnemies = 4;
 	numFrames = 1;
@@ -78,7 +79,8 @@ LaserGladiator::~LaserGladiator()
 		SAFE_DELETE(explosions[i]);
 	}
 	SAFE_DELETE(audio);
-	SAFE_DELETE(face);
+	SAFE_DELETE(faceL);
+	SAFE_DELETE(faceW);
 	releaseAll();
 }
 
@@ -409,18 +411,31 @@ void LaserGladiator::initialize(HWND hwnd)
 		explosions.push_back(new Explode(graphics, this));
 	}
 
-	//face
-	if(!faceTexture.initialize(graphics, FACE))
+	//face loose
+	if(!faceLTexture.initialize(graphics, FACE_LOOSE))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing face texture"));
 	
-	face = new Image();
+	faceL = new Image();
 
-	if(!face->initialize(graphics, 437, 580, 0, &faceTexture))
+	if(!faceL->initialize(graphics, 437, 580, 0, &faceLTexture))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing face object"));
 
-	face->setScale(0);
-	face->setX(100);
-	face->setY(100);
+	faceL->setScale(0);
+	faceL->setX(100);
+	faceL->setY(100);
+
+	//face win
+	if(!faceWTexture.initialize(graphics, FACE_WIN))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing face texture"));
+	
+	faceW = new Image();
+
+	if(!faceW->initialize(graphics, 437, 580, 0, &faceWTexture))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing face object"));
+
+	faceW->setScale(0);
+	faceW->setX(100);
+	faceW->setY(100);
 
 }
 
@@ -487,7 +502,7 @@ void LaserGladiator::update()
 	numFrames++;
 	//end game
 	//player wins
-	if(activeEnemies == 0)
+	if(activeEnemies == 4)
 	{
 		endGamePlayerWins();
 	}
@@ -554,6 +569,7 @@ void LaserGladiator::collisions()
 				lasers[j]->destroy();
 				enemies[i]->blowUp();
 
+				index++;
 				explodePoint.really = true;
 				explodePoint.x = lasers[j]->getX();
 				explodePoint.y = lasers[j]->getY();
@@ -579,7 +595,7 @@ void LaserGladiator::collisions()
 		}
 	}
 
-	//collision with exposed player circie
+	//collision with exposed player circle
 	for(int i = 0; i < lasers.size(); i++)
 	{
 		//checks if laser is being destroyed
@@ -588,6 +604,7 @@ void LaserGladiator::collisions()
 			lasers[i]->destroy();
 			if(lasers[i]->getEnemyLaser())
 			{
+				index++;
 				explodePoint.really = true;
 				explodePoint.x = lasers[i]->getX();
 				explodePoint.y = lasers[i]->getY();
@@ -605,6 +622,7 @@ void LaserGladiator::collisions()
 		{
 			if(lasers[i]->getEnemyLaser())
 			{
+				index++;
 				explodePoint.really = true;
 				explodePoint.x = lasers[i]->getX();
 				explodePoint.y = lasers[i]->getY();
@@ -656,24 +674,37 @@ void LaserGladiator::render()
 
 	//explosion
 	if (explodePoint.really) {
-		explosions[0]->explodeAt(explodePoint.x, explodePoint.y);
+		explosions[index % gladiatorNS::EXPLOSION_OBJ_COUNT]->explodeAt(explodePoint.x, explodePoint.y);
 	
-		if (explosions[0]->completed()) {
+		if (explosions[index % gladiatorNS::EXPLOSION_OBJ_COUNT]->completed()) {
 			explodePoint.really = false;
 		}
 	}
 	
 
-	//face
+	//face loose
 	if(failSauce) {
-		if (face->getScale() < 0.7f) {
-			face->setScale(face->getScale() + 0.003);
-			face->setX(GAME_WIDTH / 2 - (face->getWidth() * face->getScale()) / 2);
-			face->setY(GAME_HEIGHT / 2 - (face->getHeight() * face->getScale()) / 2);
+		if (faceL->getScale() < 0.7f) {
+			faceL->setScale(faceL->getScale() + 0.003);
+			faceL->setX(GAME_WIDTH / 2 - (faceL->getWidth() * faceL->getScale()) / 2);
+			faceL->setY(GAME_HEIGHT / 2 - (faceL->getHeight() * faceL->getScale()) / 2);
 		}
 
-		face->draw();
+		faceL->draw();
 	}
+
+	//face win
+	if(winSauce) {
+		if (faceW->getScale() < 0.7f) {
+			faceW->setScale(faceW->getScale() + 0.003);
+			faceW->setX(GAME_WIDTH / 2 - (faceW->getWidth() * faceW->getScale()) / 2);
+			faceW->setY(GAME_HEIGHT / 2 - (faceW->getHeight() * faceW->getScale()) / 2);
+		}
+
+		faceW->draw();
+		explosions[0]->explodeAt(rand() % GAME_WIDTH, rand() % GAME_HEIGHT);
+	}
+
 
 	graphics->spriteEnd();
 }
@@ -712,8 +743,22 @@ void LaserGladiator::resetAll()
 
 void LaserGladiator::endGamePlayerWins()
 {
-	//do something cool here
-	exitGame();
+	winSauce = true;
+
+//Disable all the things!
+	player->setActive(false);
+	player->setVisible(false);
+	player->setTurretActive(false);
+	player->setTurretVisible(false);
+	player->setMirrorActive(false);
+	player->setMirrorVisible(false);
+
+	for(int i = 0; i < enemies.size(); i++)
+	{
+		enemies[i]->setActive(false);
+		enemies[i]->setVisible(false);
+	}
+	//exitGame();
 }
 
 void LaserGladiator::endGamePlayerLoses()
