@@ -50,6 +50,7 @@ const char WAVE_BANK[] = "source\\audio\\win\\Wave Bank.xwb";
 const char SOUND_BANK[] = "source\\audio\\win\\Sound Bank.xsb";
 //sound cues
 const char LASER_CUE[] = "scifi1";
+const char EXPLOSION_CUE[] = "scifi17";
 
 // window
 const char CLASS_NAME[] = "LaserGladiator";

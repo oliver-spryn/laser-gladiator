@@ -527,6 +527,7 @@ void LaserGladiator::collisions()
 			{
 				lasers[j]->destroy();
 				enemies[i]->blowUp();
+				audio->playCue(EXPLOSION_CUE);
 				playerScore+=gladiatorNS::POINTS_ENEMY_KILLED;
 				//only reduces number if enemy is eliminated
 				if(!enemies[i]->getActive())
@@ -557,6 +558,7 @@ void LaserGladiator::collisions()
 			if(lasers[i]->getEnemyLaser())
 			{
 				player->reduceHealth(1);
+				audio->playCue(EXPLOSION_CUE);
 				healthBarImages[player->getHealth()]->setVisible(false);
 			}
 		}
@@ -570,6 +572,7 @@ void LaserGladiator::collisions()
 			if(lasers[i]->getEnemyLaser())
 			{
 				lasers[i]->destroy();
+				audio->playCue(EXPLOSION_CUE);
 				player->setTurretActive(false);
 				player->setTurretColor(graphicsNS::GRAY);
 			}

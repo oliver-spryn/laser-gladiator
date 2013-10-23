@@ -20,7 +20,7 @@ namespace playerNS {
 	const int WIDTH  = 71;                            // Width of the image
     const int X      = gladiatorNS::ARENA_START_X + gladiatorNS::ARENA_WIDTH/2 - gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V;    // X position of the image
     const int Y      = gladiatorNS::ARENA_START_Y + gladiatorNS::ARENA_HEIGHT/2 - gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H;  // Y position of the image
-	const int TOTAL_LASERS = 100;
+	const int TOTAL_LASERS = 4;
 }
 
 class Player : public Entity {
