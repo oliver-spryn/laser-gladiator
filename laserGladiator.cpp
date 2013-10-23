@@ -465,7 +465,7 @@ void LaserGladiator::update()
 		}
 	}
 	//fire a laser from enemy turret
-	if(numFrames%(500+rand()%1000)==0)
+	if(numFrames%(300+rand()%800)==0)
 	{
 		int enemyChosen = rand()%4;
 		if(enemies[enemyChosen]->getActive())
