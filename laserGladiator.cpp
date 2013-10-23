@@ -267,8 +267,9 @@ void LaserGladiator::initialize(HWND hwnd)
 	if(!e->initialize(this, enemyNS::WIDTH, enemyNS::HEIGHT, enemyNS::TEXTURE_COLS, &enemyTexture))
 			throw(GameError(gameErrorNS::FATAL_ERROR, "error initializing Enemy"));
 	e->setX(gladiatorNS::ARENA_START_X + enemyNS::HEIGHT/2);
-	e->setY(gladiatorNS::ARENA_START_Y + gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H + enemyNS::WIDTH/2);
-	e->setVelocity(VECTOR2(0,enemyNS::SPEED));
+	//e->setY(gladiatorNS::ARENA_START_Y + gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H + enemyNS::WIDTH/2);
+	e->setY(gladiatorNS::ARENA_START_Y + (gladiatorNS::ARENA_HEIGHT/2) + (gladiatorNS::ARENA_HEIGHT-gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H*2 - enemyNS::WIDTH*2)/4);
+	e->setVelocity(VECTOR2(0,-enemyNS::SPEED));
 	e->setDegrees(270);
 	e->setColor(graphicsNS::RED);
 	enemies.push_back(e);
@@ -279,9 +280,10 @@ void LaserGladiator::initialize(HWND hwnd)
 	if(!e->initialize(this, enemyNS::WIDTH, enemyNS::HEIGHT, enemyNS::TEXTURE_COLS, &enemyTexture))
 			throw(GameError(gameErrorNS::FATAL_ERROR, "error initializing Enemy"));
 	e->setX(gladiatorNS::ARENA_START_X+gladiatorNS::ARENA_WIDTH - enemyNS::HEIGHT);
-	e->setY(gladiatorNS::ARENA_START_Y + gladiatorNS::ARENA_HEIGHT - gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H - enemyNS::WIDTH*2);
+	//e->setY(gladiatorNS::ARENA_START_Y + gladiatorNS::ARENA_HEIGHT - gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H - enemyNS::WIDTH*2);
+	e->setY(gladiatorNS::ARENA_START_Y + (gladiatorNS::ARENA_HEIGHT/2) - (gladiatorNS::ARENA_HEIGHT-gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H*2 - enemyNS::WIDTH*2)/4);
 	e->setDegrees(90);
-	e->setVelocity(VECTOR2(0,-enemyNS::SPEED));
+	e->setVelocity(VECTOR2(0,enemyNS::SPEED));
 	e->setDirection(LEFT);
 	e->setColor(graphicsNS::RED);
 	enemies.push_back(e);
@@ -291,8 +293,9 @@ void LaserGladiator::initialize(HWND hwnd)
 	e = new Enemy(DOWN);
 	if(!e->initialize(this, enemyNS::WIDTH, enemyNS::HEIGHT, enemyNS::TEXTURE_COLS, &enemyTexture))
 			throw(GameError(gameErrorNS::FATAL_ERROR, "error initializing Enemy"));
-	e->setX(gladiatorNS::ARENA_START_X + gladiatorNS::ARENA_WIDTH - gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V -
-		enemyNS::WIDTH*2 - gladiatorNS::ENEMY_WALL_GAP_SIZE);
+	//e->setX(gladiatorNS::ARENA_START_X + gladiatorNS::ARENA_WIDTH - gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V -
+		//enemyNS::WIDTH*2 - gladiatorNS::ENEMY_WALL_GAP_SIZE);
+	e->setX(gladiatorNS::ARENA_START_X + (gladiatorNS::ARENA_WIDTH/2) + (gladiatorNS::ARENA_WIDTH-gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V*2 - gladiatorNS::ENEMY_WALL_GAP_SIZE * 2 - enemyNS::HEIGHT*2)/3);
 	e->setY(gladiatorNS::ARENA_START_Y + enemyNS::HEIGHT/3);
 	e->setVelocity(VECTOR2(-enemyNS::SPEED,0));
 	e->setDirection(DOWN);
@@ -304,7 +307,8 @@ void LaserGladiator::initialize(HWND hwnd)
 	e = new Enemy(UP);
 	if(!e->initialize(this, enemyNS::WIDTH, enemyNS::HEIGHT, enemyNS::TEXTURE_COLS, &enemyTexture))
 			throw(GameError(gameErrorNS::FATAL_ERROR, "error initializing Enemy"));
-	e->setX(gladiatorNS::ARENA_START_X + gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V + enemyNS::WIDTH*2 + gladiatorNS::ENEMY_WALL_GAP_SIZE/2);
+	//e->setX(gladiatorNS::ARENA_START_X + gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V + enemyNS::WIDTH*2 + gladiatorNS::ENEMY_WALL_GAP_SIZE/2);
+	e->setX(gladiatorNS::ARENA_START_X + (gladiatorNS::ARENA_WIDTH/2) - (gladiatorNS::ARENA_WIDTH-gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V*2 - gladiatorNS::ENEMY_WALL_GAP_SIZE * 2 - enemyNS::HEIGHT*2)/3);
 	e->setY(gladiatorNS::ARENA_START_Y + gladiatorNS::ARENA_HEIGHT - enemyNS::HEIGHT);
 	e->setDegrees(180);
 	e->setVelocity(VECTOR2(enemyNS::SPEED,0));
