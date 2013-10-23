@@ -28,8 +28,8 @@ Enemy::Enemy(Direction direction)
 		lasers[i] = new Laser();
 		lasers[i]->setEnemyLaser(true);
 	}
-	distanceToTravel = (direction == LEFT||direction == RIGHT)?gladiatorNS::ARENA_HEIGHT-gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H*2 - enemyNS::WIDTH*2:
-		gladiatorNS::ARENA_WIDTH-gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V*2 - gladiatorNS::ENEMY_WALL_GAP_SIZE * 2 - enemyNS::HEIGHT*2;
+	distanceToTravel = (direction == LEFT||direction == RIGHT)?2*(gladiatorNS::ARENA_HEIGHT-gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H*2 - enemyNS::WIDTH*2)/3:
+		2*(gladiatorNS::ARENA_WIDTH-gladiatorNS::DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_V*2 - gladiatorNS::ENEMY_WALL_GAP_SIZE * 2 - enemyNS::HEIGHT*2)/3;
 }
 
 void Enemy::update(float frameTime)
