@@ -10,6 +10,8 @@
 #include "image.h"
 #include "input.h"
 #include "game.h"
+#include <fstream>
+#include <cmath>
 
 namespace entityNS
 {
@@ -72,7 +74,7 @@ class Entity : public Image
     // Constructor
     Entity();
     // Destructor
-    virtual ~Entity() {}
+	virtual ~Entity() {}
 
     ////////////////////////////////////////
     //           Get functions            //
@@ -176,6 +178,8 @@ class Entity : public Image
 
     // Entity bounces after collision with other Entity
     void bounce(VECTOR2 &collisionVector, Entity &ent);
+
+	void newBounce(VECTOR2 &collisionVector, Entity &ent);
 
     // Adds the gravitational force to the velocity vector of this entity
     void gravityForce(Entity *other, float frameTime);

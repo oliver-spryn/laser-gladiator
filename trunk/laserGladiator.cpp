@@ -537,7 +537,8 @@ void LaserGladiator::collisions()
 		//checks if the laser is being destroyed
 		if(!lasers[i]->getDestruct() && lasers[i]->getActive() && player->getMirror().collidesWith(*lasers[i],collisionVector))
 		{
-			lasers[i]->bounce(collisionVector,player->getMirror());
+			//lasers[i]->newBounce(collisionVector,player->getMirror());
+			lasers[i]->setVelocity(VECTOR2(lasers[i]->getVelocity()*-1));
 			playerScore+=gladiatorNS::POINTS_DEFLECTION;
 		}
 	}
