@@ -34,7 +34,10 @@ void Player::draw() {
 
 void Player::fire(Laser &laser) {
 	if(turret.getActive())
+	{
 		laser.fireRad(turret.getCenterX(), turret.getCenterY(), -this->radians + 3*PI/2);
+		audio->playCue(TEST_CUE);
+	}
 }
 
 bool Player::initialize(Game *gamePtr, int width, int height, int ncols, TextureManager *textureM) {
