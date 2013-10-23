@@ -36,7 +36,7 @@ void Player::fire(Laser &laser) {
 	if(turret.getActive())
 	{
 		laser.fireRad(turret.getCenterX(), turret.getCenterY(), -this->radians + 3*PI/2);
-		audio->playCue(TEST_CUE);
+		audio->playCue(LASER_CUE);
 	}
 }
 

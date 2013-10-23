@@ -49,7 +49,7 @@ const char HEALTH_IMAGE[] = "source\\pictures\\HealthText.png";
 const char WAVE_BANK[] = "source\\audio\\win\\Wave Bank.xwb";
 const char SOUND_BANK[] = "source\\audio\\win\\Sound Bank.xsb";
 //sound cues
-const char TEST_CUE[] = "OOT_Secret";
+const char LASER_CUE[] = "scifi1";
 
 // window
 const char CLASS_NAME[] = "LaserGladiator";
