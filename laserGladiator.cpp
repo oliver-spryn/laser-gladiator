@@ -396,6 +396,12 @@ void LaserGladiator::initialize(HWND hwnd)
 		player->getLasers()[i]->setSelfDestructMethod(Laser::COLLISION_DESTROY,20);
 		lasers.push_back(player->getLasers()[i]);
 	}
+
+	//explosions
+	for (int i = 0; i < gladiatorNS::EXPLOSION_OBJ_COUNT; ++i)
+	{
+		explosions.push_back(new Explode(graphics, this));
+	}
 }
 
 void LaserGladiator::update()
@@ -527,7 +533,13 @@ void LaserGladiator::collisions()
 			{
 				lasers[j]->destroy();
 				enemies[i]->blowUp();
+<<<<<<< .mine
+				explodePoint.really = true;
+				explodePoint.x = lasers[j]->getX();
+				explodePoint.y = lasers[j]->getY();
+=======
 				audio->playCue(EXPLOSION_CUE);
+>>>>>>> .r25
 				playerScore+=gladiatorNS::POINTS_ENEMY_KILLED;
 				//only reduces number if enemy is eliminated
 				if(!enemies[i]->getActive())
@@ -557,6 +569,9 @@ void LaserGladiator::collisions()
 			lasers[i]->destroy();
 			if(lasers[i]->getEnemyLaser())
 			{
+				explodePoint.really = true;
+				explodePoint.x = lasers[i]->getX();
+				explodePoint.y = lasers[i]->getY();
 				player->reduceHealth(1);
 				audio->playCue(EXPLOSION_CUE);
 				healthBarImages[player->getHealth()]->setVisible(false);
@@ -571,6 +586,9 @@ void LaserGladiator::collisions()
 		{
 			if(lasers[i]->getEnemyLaser())
 			{
+				explodePoint.really = true;
+				explodePoint.x = lasers[i]->getX();
+				explodePoint.y = lasers[i]->getY();
 				lasers[i]->destroy();
 				audio->playCue(EXPLOSION_CUE);
 				player->setTurretActive(false);
@@ -585,7 +603,7 @@ void LaserGladiator::render()
 	graphics->spriteBegin();
 	//do all of the entity draws
 	player->draw();
-
+	
 	for(int i = 0; i < walls.size(); i++)
 	{
 		walls[i]->draw();
@@ -615,6 +633,15 @@ void LaserGladiator::render()
 	for(int i = 0; i < gladiatorNS::NUM_HEALTH_BARS; i++)
 	{
 		healthBarImages[i]->draw(graphicsNS::CYAN);
+	}
+
+	//explision
+	if (explodePoint.really) {
+		explosions[0]->explodeAt(explodePoint.x, explodePoint.y);
+	
+		if (explosions[0]->completed()) {
+			explodePoint.really = false;
+		}
 	}
 
 	graphics->spriteEnd();
