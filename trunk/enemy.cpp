@@ -97,6 +97,7 @@ void Enemy::fireLaser()
 			}
 			lasers[i]->fire(xLocation, yLocation);
 			lasers[i]->setVelocity(VECTOR2(xSpeed,ySpeed));
+			audio->playCue(LASER_CUE);
 			break;
 		}
 	}
