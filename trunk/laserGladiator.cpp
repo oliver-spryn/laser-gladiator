@@ -76,7 +76,8 @@ LaserGladiator::~LaserGladiator()
 	}
 	for(int i = 0; i < gladiatorNS::EXPLOSION_OBJ_COUNT; i++)
 	{
-		SAFE_DELETE(explosions[i]);
+
+//		SAFE_DELETE(explosions[i]);
 	}
 	SAFE_DELETE(audio);
 	SAFE_DELETE(faceL);
