@@ -2,6 +2,7 @@
 #define _LASERGLADIATOR_H	          // file is included in more than one place
 #define WIN32_LEAN_AND_MEAN
 
+#include "Explode.h"
 #include "game.h"
 #include "textureManager.h"
 #include "image.h"
@@ -25,6 +26,13 @@ struct Position
 	float x, y;
 };
 
+struct ExplodeData {
+	ExplodeData() {really = false; x = 0; y = 0;};
+	bool really;
+	int x;
+	int y;
+};
+
 //this is the laserGladiator class
 class LaserGladiator : public Game
 {
@@ -39,6 +47,8 @@ private:
 	vector<Enemy*> enemies;
 	vector<Laser*> lasers;
 	vector<vector<Position>> mirrorPositions;
+	ExplodeData explodePoint;
+	vector<Explode*> explosions;
 	Image* healthTextImage;
 	Image* healthBarImages[gladiatorNS::NUM_HEALTH_BARS];
 	int rows, columns;

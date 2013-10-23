@@ -51,6 +51,7 @@ public :
 	Explode(Graphics* g, Game* gamePtr);
 	~Explode();
 	
+	bool completed();
 	void explodeAt(int x, int y);
 };
 

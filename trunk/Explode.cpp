@@ -1,6 +1,6 @@
 #include "Explode.h"
 
-Explode::Explode(Graphics* g, Game* gamePtr) : 
+Explode::Explode(Graphics* g, Game* gamePtr) :
 	flareOne(new Flare(explodeNS::FLARE_WIDTH, explodeNS::FLARE_HEIGHT)),
 	flareTwo(new Flare(explodeNS::FLARE_WIDTH, explodeNS::FLARE_HEIGHT)), gamePtr(gamePtr), sparkCounter(0),
 	spark(explodeNS::SPARK_COUNT, Spark(explodeNS::SPARK_WIDTH, explodeNS::SPARK_LENGTH)) {
@@ -49,6 +49,10 @@ Explode::Explode(Graphics* g, Game* gamePtr) :
 Explode::~Explode() {
 	delete this->flareOne;
 	delete this->flareTwo;
+}
+
+bool Explode::completed() {
+	return this->spark[0].transitionCompleted();
 }
 
 void Explode::explodeAt(int x, int y) {

@@ -95,6 +95,7 @@ namespace gladiatorNS
 	const int WALL_WIDTH = 4;
 	const int ARENA_START_X = 20;
 	const int ARENA_START_Y = 60;
+	const int EXPLOSION_OBJ_COUNT = 3;
 	const int ENEMY_WALL_GAP_SIZE = 20;
 	//for horizontal enemy walls
 	const int DISTANCE_BETWEEN_ARENA_AND_ENEMY_WALLS_H = enemyNS::HEIGHT + enemyNS::HEIGHT/2;
