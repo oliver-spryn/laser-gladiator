@@ -502,7 +502,7 @@ void LaserGladiator::update()
 	numFrames++;
 	//end game
 	//player wins
-	if(activeEnemies == 4)
+	if(activeEnemies == 0)
 	{
 		endGamePlayerWins();
 	}
